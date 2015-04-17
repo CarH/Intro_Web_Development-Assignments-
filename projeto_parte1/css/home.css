@@ -1,0 +1,51 @@
+/************ LOGIN PAGE ************/
+.login_container {
+	float: right;
+	padding: 0px;
+	/*background-color: rgba(0, 0, 0, 0.5);*/
+}
+
+#email {
+	/*padding-top: 5px;*/
+	margin-top: 5px;
+	padding-right: 5px;
+	float: left;
+}
+
+#password {
+	margin-top: 5px;
+	padding-right: 5px;
+	float: left;
+}
+
+#loginbtn {
+	margin-top: 0px;
+	margin-right: 5px;
+	float: left;
+}
+
+#registerbtn {
+	margin-top: 0px;
+	float: left;
+}
+
+#banner {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	float: left;
+}
+
+
+
+/*#infoEmail {
+	height: 11px;
+	font-size: 10px;
+}*/
+/*.login_container>h3 .login_container>form{
+	float: right;
+	margin-top: 0px;
+	width: 100%;
+	padding-top: 0px;
+}
+*/
