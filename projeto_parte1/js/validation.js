@@ -29,17 +29,22 @@ $(document).ready(function () {
 		// email:
 		patt = new RegExp("[a-z]");
 		if (patt.test(email[email.length-1])) {
-			patt = new RegExp("[a-z]([a-z0-9.]*[a-z0-9]+)?@[a-z0-9]+(.){1}([a-z0-9.]*)?[a-z0-9]+");
+			patt = new RegExp("[a-z]([a-z0-9.]*[a-z0-9]+)?@[a-z0-9]+\\.([a-z0-9.]*)?[a-z0-9]+");
 			if ( patt.test(email) ){
 				console.log("Email ok!");
-				$("#infoEmail").text("ok!");
+				// $("#infoEmail").text("ok!");
+				myInfo("#infoEmail", "ok!", SUCCESS_COLOR);
 			} else {
-				$("#infoEmail").text("Email não está no formato permitido.");
+				myInfo("#infoEmail", "Email não está no formato permitido.");
 			};
 		} else {
-			$("#infoEmail").text("Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
+			// $("#infoEmail").text("Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
+			
+			myInfo("#infoEmail", "Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
 			console.log("email finalizado INCORRETAMENTE : \""+email[email.length-1]+"\"");
 		};
+
+		// TODO: validacao de senha = é a mesma de cadastro!!
 
 	});
 
@@ -48,7 +53,7 @@ $(document).ready(function () {
 		var nome, cpf, dataNasc, sexo, est_civil, cidade, estado, cep, email, senha, conf_senha;
 		var patt;
 
-		nome = $("#tfnome").val();
+		nome = $("#tfnomecompleto").val();
 		dataNasc = $("#dataNasc").val();
 		// alert(nome);
 		//new Date(year, month, day, hours, minutes, seconds, milliseconds)
