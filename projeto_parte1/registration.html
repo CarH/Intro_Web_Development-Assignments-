@@ -11,7 +11,8 @@
 		<script src="js/validation.js"></script>	
 		<script src="js/layout_adjusts.js"></script>	
 		<script src="js/general_events_handler.js"></script>	
-
+		<script src="js/cadastro_controller.js"></script>
+		<script src="js/user_class.js"></script>
 		<script>
 			// Utilizei script interno pois cada página terá um background diferente. Se fosse inserir tudo num CSS externo o mesmo ficaria excessivamente grande.
 
@@ -71,7 +72,7 @@
 	
 					<div id="estado_civil">
 						<label> Estado civil </label>
-						<select name="estadocivil" title="Selecione seu estado civil">
+						<select name="estadocivil" title="Selecione seu estado civil" id="marital_status">
 							<option value="unknown" selected=""> - </option>
 							<option value="solteiro"> Solteiro </option>
 							<option value="casado"> Casado </option>
@@ -84,13 +85,13 @@
 					<legend>Endereço </legend>
 					<div id="cidade">
 						<label> Cidade </label> 
-						<input type="text" name="cidade">
+						<input type="text" name="cidade" id="cidade">
 						<div id="infocidade" class="error_msg"></div>
 					</div>
 
 					<div id="estado">
 						<label> Estado </label> 
-						<select name="estado" title="Selecione o estado no qual você reside">
+						<select name="estado" title="Selecione o estado no qual você reside" id="user_state">
 				            <option value="unknown" selected=""> - </option>
 				            <option value="ac"> AC </option>
 				            <option value="al"> AL </option>
