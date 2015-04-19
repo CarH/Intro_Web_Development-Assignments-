@@ -1,3 +1,7 @@
+
+/*
+ * Definition of class User. ("Model"- MVC)
+ */
 function User()
 {
 	var name = "";
@@ -12,7 +16,7 @@ function User()
 	var password = "";
 }
 
-/*setters and getters to each property*/
+/*object-oriented programming: setters and getters to each property*/
 User.prototype.getName = function()
 {
 	return this.name;
@@ -165,7 +169,7 @@ User.prototype.saveData = function()
 }
 
 /*
- * retriveData: recovers all the data previsoly saved.
+ * retriveData: recovers all the data previously saved.
  *
  * description: this function recovers all the data saved in the localStorage.
  *		Using a primary key (email + password), all the data are recovered

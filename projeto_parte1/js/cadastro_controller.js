@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	//se der problemas de jQuery, criar um handler para evento de campos validados
 	$("#cadastrarbtn").click(function() {
-		localStorage.clear();
 		var new_user = new User();
 		new_user.setName($("#tfnomecompleto").val());
 		new_user.setCPF($("#tfcpf").val());

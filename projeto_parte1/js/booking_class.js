@@ -54,9 +54,14 @@ Booking.prototype.setNumberOfBabies = function(newNumberOfBabies)
 	this.nBabies = newNumberOfBabies;
 }
 
-Booking.prototype.getNumberOfChildren = function(newNumberOfChildren)
+Booking.prototype.getNumberOfChildren = function()
 {
-	this.nChildren = newNumberOfChildren;
+	return this.nChildren;
+}
+
+Booking.prototype.setNumberOfChildren = function(newNumberOfChildren)
+{
+	this.nChildren = newNumberOfChildren;	
 }
 
 /*
