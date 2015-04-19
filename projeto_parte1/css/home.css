@@ -12,6 +12,10 @@
 	float: left;
 }
 
+#tfemail {
+	width: 250px;
+}
+
 #password {
 	margin-top: 5px;
 	padding-right: 5px;
@@ -36,6 +40,9 @@
 	float: left;
 }
 
+#loginbtn, #registerbtn {
+	margin-top: 3px;
+}
 
 
 /*#infoEmail {

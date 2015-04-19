@@ -199,11 +199,12 @@ fieldset {
 	display: block;
 }
 
-#comonosconheceu input {
+#como input {
 	display: inline;
 	width: 15px;
 	height: 15px;
 	margin-right: 15px;
+	margin-bottom: 0px;
 }
 
 
