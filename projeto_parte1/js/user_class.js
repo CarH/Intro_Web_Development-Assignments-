@@ -20,8 +20,7 @@ User.prototype.getName = function()
 
 User.prototype.setName = function(newName)
 {
-	if (newName != null)
-		this.name = newName;
+	this.name = newName;
 }
 
 User.prototype.getCPF = function()
@@ -31,8 +30,7 @@ User.prototype.getCPF = function()
 
 User.prototype.setCPF = function(newCPF)
 {
-	if (newCPF != null)
-		this.cpf= newCPF;
+	this.cpf= newCPF;
 }
 
 User.prototype.getBirthDate = function()
@@ -102,8 +100,7 @@ User.prototype.getEmail = function()
 
 User.prototype.setEmail = function(newEmail)
 {
-	if (newEmail != null)
-		this.email = newEmail;
+	this.email = newEmail;
 }
 
 User.prototype.getPassword = function()
@@ -113,8 +110,7 @@ User.prototype.getPassword = function()
 
 User.prototype.setPassword = function(newPassword)
 {
-	if (newPassword != null)
-		this.password = newPassword;
+	this.password = newPassword;
 }
 
 /*
@@ -128,11 +124,12 @@ User.prototype.setPassword = function(newPassword)
  *
  * returns: flag_error, containing the log message if any error 
  * 		occurred
+ *
  */
 User.prototype.saveData = function()
 {
 	var flag_error = "";
-	if (myUser == null) {
+	if (this == null) {
 		flag_error = "null pointer passed as valid parameter\n";
 		return flag_error;	
 	} else {
@@ -147,6 +144,7 @@ User.prototype.saveData = function()
  			* now, lets save all the data, reminding that
  			* we must care about the oneness of each user's register.
  			*/
+
 			localStorage.setItem(primary_key + "name", this.getName());
 			localStorage.setItem(primary_key + "cpf", this.getCPF());
 			localStorage.setItem(primary_key + "birthDate", this.getBirthDate());
@@ -185,15 +183,8 @@ User.prototype.retrieveData = function()
 		return flag_error;
 	}
 
-	/*getting the informations about the user trying to sign in*/
 	var primary_key = this.getEmail() + this.getPassword();
-	var user_name = localStorage.getItem(primary_key + "name");
-	if (user_name == null) {
-		flag_error: "user not found. login not completed";
-		return flag_error;
-	}
-
-	this.setName(user_name);
+	this.setName(localStorage.getItem("primary_key" + "name"));
 	this.setCPF(localStorage.getItem(primary_key + "cpf"));
 	this.setBirthDate(localStorage.getItem(primary_key + "birthDate"));
 	this.setGender(localStorage.getItem(primary_key + "gender"));
@@ -205,4 +196,28 @@ User.prototype.retrieveData = function()
 	this.setPassword(localStorage.getItem(primary_key + "password"));
 	flag_error = "data successfully recovered";
 	return flag_error;	
+}
+
+
+/*
+ * validateUser: checks whether a user exists
+ *
+ * description: this method try to chek if an given user exists,
+ * 		using the primary key (email + password), try to read
+ *		from the local storage the information about the CPF,
+ *		if getItem return null or undefined, its because the user
+ *		does not exist, or exists, otherwise.
+ *
+ * return: 1 if the user does not exist,
+ * 	   0, otherwise.
+ */
+User.prototype.validateUser = function()
+{
+	var primary_key = this.getEmail() + this.getPassword();
+	var CPF = localStorage.getItem(primary_key + "cpf");
+	if (CPF == null || CPF == undefined) {
+		return 1;	
+	} else {
+		return 0;	
+	}
 }
