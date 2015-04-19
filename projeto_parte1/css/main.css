@@ -1,5 +1,5 @@
 * {
-   /*outline: 1px solid red !important;*/
+   outline: 1px solid red !important;
 }
 * {
     -webkit-box-sizing: border-box;
@@ -7,10 +7,10 @@
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 } 
-* {
+/** {
 	font-family: sans-serif;
 }
-
+*/
 body {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	margin: 0px;
@@ -38,6 +38,10 @@ label {
 	font-size: 16px;
 }
 
+textarea {
+	width: 100%;
+}
+
 .center {
     margin-left: auto;
     margin-right: auto;
@@ -57,6 +61,8 @@ label {
 .btnpattern {
 	width: inherit;
 	color: white;
+	max-width: 240px;
+	float: left;
 	background-color: rgba(1, 1, 1, 0.5);
 	margin-top: 10px;
 	padding-top: 5px;
@@ -83,7 +89,7 @@ label {
 	border-bottom-color: #2B3E50;
 }
 
-.nav_container{
+.nav_container {
 	background-color: rgba(43, 62, 80, .5);
 	border: 0px;
 	padding: 20px;
@@ -120,12 +126,15 @@ label {
 }
 
 .error_msg {
-	color: #FF1919;
+	color: rgb(255, 0, 0);
 	height: 15px;
 	font-size: 14px;
 	font-weight: bolder;
 }
 
+.error_msg.blueText {
+	color: rgb(0, 0, 255);
+}
 
 #banner>img {
 	width: 100%;
@@ -141,8 +150,7 @@ label {
 	height: 800px;
 }
 
-/************ REGISTRATION PAGE ************/
-.registerclass {
+.formclass {
 	float: left;
 	margin: 10px;
 	margin-left: 25%;/* se tirar o placeholder poe isso! */
@@ -153,13 +161,19 @@ label {
 	border-radius: 5%;
 	background-color: rgba(0, 0, 0, 0.5); 
 }
-
-#registerform input {
+.formclass input {
 	width: 60%; /* largura do tf*/
 	padding: 3px;
 	display: block;
 }
 
+.formclass select {
+	width: 100px;
+	padding: 3px;
+	display: block;
+}
+
+/************ REGISTRATION PAGE ************/
 #registerform select {
 	width: 100px;
 	padding: 3px;
@@ -168,18 +182,28 @@ label {
 
 #sexo input {
 	display: inline;
-	width: 14px;
-	height: 14px;
-}
-
-#cadastrarbtn, #cancelarbtn{
-	
-	max-width: 240px;
-	float: left;
-
-	/*text-align: center;*/
+	width: 15px;
+	height: 15px;
 }
 
 fieldset {
 	margin-top: 10px;
 }
+
+
+/**************** CONTACT PAGE ***************/
+
+#contactform input {
+	width: 60%; /* largura do tf*/
+	padding: 3px;
+	display: block;
+}
+
+#comonosconheceu input {
+	display: inline;
+	width: 15px;
+	height: 15px;
+	margin-right: 15px;
+}
+
+
