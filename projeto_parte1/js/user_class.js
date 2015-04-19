@@ -125,7 +125,6 @@ User.prototype.setPassword = function(newPassword)
  * returns: flag_error, containing the log message if any error 
  * 		occurred
  *
- * FIXME: name, email and password are not being captured as expected.
  */
 User.prototype.saveData = function()
 {
@@ -199,6 +198,19 @@ User.prototype.retrieveData = function()
 	return flag_error;	
 }
 
+
+/*
+ * validateUser: checks whether a user exists
+ *
+ * description: this method try to chek if an given user exists,
+ * 		using the primary key (email + password), try to read
+ *		from the local storage the information about the CPF,
+ *		if getItem return null or undefined, its because the user
+ *		does not exist, or exists, otherwise.
+ *
+ * return: 1 if the user does not exist,
+ * 	   0, otherwise.
+ */
 User.prototype.validateUser = function()
 {
 	var primary_key = this.getEmail() + this.getPassword();
