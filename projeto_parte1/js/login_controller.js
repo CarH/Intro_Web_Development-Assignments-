@@ -10,7 +10,11 @@ $(document).ready(function() {
 		if (login_log == 1) {
 			alert("Usuário inexistente!\n");
 		} else {
-			alert("Login efetuado com sucesso\n");
+			/*Controller -> Model: state change
+ 			* once the user exists, then a method invocation 			
+ 			* is needed to do the state change.
+ 			*/
+			login_try.retrieveData();
 		}
 	});
 });
