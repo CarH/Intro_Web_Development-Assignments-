@@ -41,7 +41,8 @@ Booking.prototype.getNumberOfAdults = function()
 
 Booking.prototype.setNumberOfAdults = function(newNumberOfAdults)
 {
-	this.nAdults = newNumberOfAdults;		
+	if (!isNaN(newNumberOfAdults))
+		this.nAdults = newNumberOfAdults;		
 }
 
 Booking.prototype.getNumberOfBabies = function()
@@ -51,7 +52,8 @@ Booking.prototype.getNumberOfBabies = function()
 
 Booking.prototype.setNumberOfBabies = function(newNumberOfBabies)
 {
-	this.nBabies = newNumberOfBabies;
+	if (!isNaN(newNumberOfBabies))
+		this.nBabies = newNumberOfBabies;
 }
 
 Booking.prototype.getNumberOfChildren = function()
@@ -61,7 +63,8 @@ Booking.prototype.getNumberOfChildren = function()
 
 Booking.prototype.setNumberOfChildren = function(newNumberOfChildren)
 {
-	this.nChildren = newNumberOfChildren;	
+	if (!isNaN(newNumberOfChildren))
+		this.nChildren = newNumberOfChildren;	
 }
 
 /*
@@ -88,11 +91,11 @@ Booking.prototype.saveData = function()
 	if (typeof(Storage) != undefined) {
 		localStorage.setItem("checkin", this.getDateCheckIn());
 		localStorage.setItem("checkout", this.getDateCheckOut());
-		localStorage.setItem("adults", this.getNumberOfAdults.toString());
-		localStorage.setItem("babies", this.getNumberOfBabies.toString());
-		localStorage.setItem("children", this.getNumberOfChildren.toString());
+		localStorage.setItem("adults", this.getNumberOfAdults().toString());
+		localStorage.setItem("babies", this.getNumberOfBabies().toString());
+		localStorage.setItem("children", this.getNumberOfChildren().toString());
 	} else {
-		flag_error = "Your browser does notsuppor the Web Storage API";
+		flag_error = "Your browser does not support the Web Storage API";
 		return flag_error;
 	}
 }
@@ -107,6 +110,9 @@ Booking.prototype.saveData = function()
  * returns: -1, if the booking does not exist,
  * 	    1, if the browser does not support the Web Storage API
  * 	    0, otherwise.
+ *
+ * XXX: verify if the returning type from the function violates
+ * 	the MVC design pattern.
  */
 Booking.prototype.retrieveData = function()
 {
@@ -119,9 +125,9 @@ Booking.prototype.retrieveData = function()
 		}
 		this.dateCheckIn = localStorage.getItem("checkin");
 		this.dateCheckOut = localStorage.getItem("checkout");
-		this.nAdults = parseInt(localStorage.getItem("adults"));
-		this.nBabies = parseInt(localStorage.getItem("babies"));
-		this.nChildren = parseInt(localStorage.getItem("children"));
+		this.setNumberOfAdults(parseInt(localStorage.getItem("adults")));
+		this.setNumberOfBabies(parseInt(localStorage.getItem("babies")));
+		this.setNumberOfChildren(parseInt(localStorage.getItem("children")));
 		flag_error = 0;
 		return flag_error;		
 	} else {
