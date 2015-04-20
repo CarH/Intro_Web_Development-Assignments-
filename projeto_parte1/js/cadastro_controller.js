@@ -17,6 +17,5 @@ $(document).ready(function(){
 		new_user.setEmail($("#user_email").val());
 		new_user.setPassword($("#user_password").val());
 		new_user.saveData();
-		location.replace("./home.html");
 	});
 });
