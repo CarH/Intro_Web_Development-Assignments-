@@ -23,18 +23,6 @@ function myInfoAccepted (element, text) {
 	}
 }
 
-//////////////////Reserva : TODO
-function check_validations (){
-	if ( !$("#masculino").checked && !$("#feminino").checked ) {
-		myInfo("#infosexo", "Selecione o sexo.");
-		return false;
-	}
-	if ( $("#marital_status").val() == "unknown" ) {
-		myInfo("#infoestadocivil", "Selecione o sexo.");
-		return false;
-	}
-}
-//////////////////////
 /*
  calc_digitos_posicoes
  
@@ -102,7 +90,7 @@ function calc_digitos_posicoes( digitos, posicoes, soma_digitos) {
  @param  string cpf O CPF com ou sem pontos e traço
  @return bool True para CPF correto - False para CPF incorreto
 */
-function valida_cpf( valor ) {
+function mvalida_cpf ( valor ) {
  
     // Garante que o valor é uma string
     valor = valor.toString();
@@ -130,184 +118,291 @@ function valida_cpf( valor ) {
         return false;
     }
     
-} // valida_cpf
+} // valida_cpf_ 
  
+/**
+ *	Valida o nome 
+ */
+function valida_nome () {
+	var nome;
+	nome = $("#tfnomecompleto").val();
 
+	// alert(nome);
+	var partes = nome.trim();
+	
+	console.log("partes(antes) = "+partes);
+	partes = partes.replace(/(\s|\t)+/g, " ");
+	console.log("partes(depois) = "+partes);
+
+	partes = partes.split(" ");
+	console.log("partes.length = "+partes.length);
+	if ( partes.length < 2 ) { 
+		myInfo("#infonome", "Nome inválido. O nome deve conter pelo menos duas palavras, todas com no mínimo 3 caracteres.");
+	} else { // Temos 2 ou mais palavras
+		console.log ("tem pelo menos 2 palavras.");
+
+		var k = 0;
+		while ( k < partes.length ) { 
+			if ( partes[k].length < 3 ){
+				break;
+			}
+			k++; 
+		}
+		console.log("k = "+k+"    |   partes.length = "+partes.length);
+		if ( k != partes.length ) {
+			myInfo("#infonome", "Todas as palavras devem ter, no mínimo, 3 caracteres");
+		} else { // Temos pelo menos 2 palavras, todas com >= 3 caracteres
+			var success;
+			patt = RegExp ("^[a-zA-Z]");
+			for (var i = 0; i < partes.length; i++) {
+				if ( !patt.test(partes[i]) ) {
+					myInfo("#infonome", "Nome inválido. O primeiro caractere de cada palavra deve ser uma letra do alfabeto.");
+					success = false;
+					break;
+				}
+				partes[i] = partes[i].replace(/^[a-z]/, function myFunction(x){return x.toUpperCase();});
+
+				success = true;
+			}
+
+			/// Debuging:
+			for (var i = 0; i < partes.length; i++) {
+				console.log("partes["+i+"]: "+partes[i]);
+			}
+
+			if ( success ) {
+				myInfoAccepted("#infonome", "ok!");
+			}
+		}
+
+	}
+}
+
+/**
+ *	Valida o email 
+ */
+function valida_email () {
+	var email, passwd, patt;
+
+	email  = $("#tfemail").val();
+	passwd = $("#tfpassword").val();
+
+	// email:
+	patt = new RegExp("[a-z]");
+	if (patt.test(email[email.length-1])) {
+		patt = new RegExp("[a-z]([a-z0-9.]*[a-z0-9]+)?@[a-z0-9]+\\.([a-z0-9.]*)?[a-z0-9]+");
+		if ( patt.test(email) ){
+			console.log("Email ok!");
+			myInfoAccepted("#infoemail", "ok!");
+		} else {
+			myInfo("#infoemail", "Email não está no formato permitido.");
+			$("#tfemail").focus();
+		}
+	} else {
+		myInfo("#infoemail", "Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
+		$("#tfemail").focus();
+		console.log("email finalizado INCORRETAMENTE : \""+email[email.length-1]+"\"");
+	}
+}
+
+/**
+ *	Valida o cpf
+ */
+function valida_cpf () {
+	console.log("Validation CPF: "+$("#tfcpf").val());
+
+	if ( mvalida_cpf( $("#tfcpf").val() ) ) {
+		console.log("CPF válido");
+		myInfoAccepted("#infocpf", "CPF válido.");
+	} else {
+		console.log("CPF inválido");
+		myInfo("#infocpf", "CPF inválido.");
+	}
+}
+
+/**
+ *	Valida data de nascimento
+ */
+function valida_data_nasc () {
+	var dataNasc, base, limit, vDataNasc;
+	var patt;
+
+	console.log("dataNasc.val() = "+$("#dataNasc").val());
+	// Data de Nascimento:
+	if ( $("#dataNasc").val() == "" ){
+		myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
+	} else {
+		vDataNasc = $("#dataNasc").val().split("-");
+
+		dataNasc = new Date(vDataNasc[1]+" "+vDataNasc[2]+", "+vDataNasc[0]);
+
+		console.log("Year: "+dataNasc.getFullYear());
+		console.log("Month: "+dataNasc.getMonth());
+		console.log("Day: "+dataNasc.getDate());
+		// console.log("dataNasc: "+vDataNasc[0]+", "+vDataNasc[1]+", " +vDataNasc[2] );
+
+		base = new Date("1 1, 1990");	// "M D, YYYY"
+		limit = new Date();				// get current date
+		console.log("base.getFullYear() = "+base.getFullYear());
+		if ( dataNasc.getFullYear() < base.getFullYear() ) { // > 1990
+			myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
+		} else {
+			if ( dataNasc.getTime() > limit.getTime() ){ // > current date
+				myInfo("#infodatanasc", "Data inválida. A data máxima aceita é "+limit.getUTCDate()+"/"+(limit.getUTCMonth()+1)+"/"+limit.getFullYear());
+			} else {
+				myInfoAccepted("#infodatanasc", "ok");	
+			}
+		}
+	}
+}
+
+/**
+ *	Valida sexo
+ */
+function valida_sexo () {
+	// sexo
+	console.log(" masculino = "+$("#masculino").is(':checked')+", feminino = "+$("#feminino").is(':checked'));
+	if ( !$("#masculino").is(':checked') && !$("#feminino").is(':checked') ) {
+		myInfo("#infosexo", "Selecione o sexo.");
+	} else {
+		myInfoAccepted("#infosexo", "ok.");
+	}
+}
+
+/**
+ *	Valida estado civil
+ */
+function valida_estado_civil () {
+	// estado civil
+	if ( $("#marital_status").val() == "unknown" ) {
+		myInfo("#infoestadocivil", "Selecione o estado civil.");
+	} else {
+		myInfoAccepted("#infoestadocivil", "ok");
+	}
+}
+
+/**
+ *	Valida estado
+ */
+function valida_estado () {
+	// estado
+	if ( $("#user_state").val() == "unknown" ) {
+		myInfo("#infoestado", "Selecione o estado.");
+	} else {
+		myInfoAccepted("#infoestado", "ok");
+	}
+}
+
+/**
+ *	Valida cidade
+ */
+function valida_cidade () {	
+	// cidade
+	var cidade = $("#user_city").val();
+	cidade = cidade.replace(/(\s|\t)+/g, "");
+	if ( cidade.length == 0 ) {
+		myInfo("#infocidade", "Digite o nome da cidade onde você reside.");
+	} else {
+		myInfoAccepted("#infocidade", "ok");
+	}
+}
+
+/**
+ *	Valida cep
+ */
+function valida_cep () {
+	// TODO : de acordo com  o estado selecionado
+	var estado;
+
+	estado = $("#user_state");
+	console.log("estado: "+estado.val());
+	if ( estado.val() == "unknown" ) {
+		myInfo("#infocep", "Informe primeiramente o estado.");
+		estado.focus();
+		return;
+	} else {
+		myInfoAccepted("#infocep", "");
+	}
+
+}
+
+function valida_senha () {
+	// TODO : checar se a senha corresponde com a confirmada
+}
 
 
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
 
-
 	/************************************************
-	 * Pagina: home.html 
+	 * Pagina: home.html e registration.html
 	 */
-	$("#tfemail").blur( function() {
-		var email, passwd, patt;
-
-		email  = $("#tfemail").val();
-		passwd = $("#tfpassword").val();
-
-		// email:
-		patt = new RegExp("[a-z]");
-		if (patt.test(email[email.length-1])) {
-			patt = new RegExp("[a-z]([a-z0-9.]*[a-z0-9]+)?@[a-z0-9]+\\.([a-z0-9.]*)?[a-z0-9]+");
-			if ( patt.test(email) ){
-				console.log("Email ok!");
-				// $("#infoEmail").text("ok!");
-				myInfoAccepted("#infoEmail", "ok!");
-			} else {
-				myInfo("#infoEmail", "Email não está no formato permitido.");
-				$("#tfemail").focus();
-			};
-		} else {
-			myInfo("#infoEmail", "Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
-			$("#tfemail").focus();
-			console.log("email finalizado INCORRETAMENTE : \""+email[email.length-1]+"\"");
-		};
+	$("#tfemail").keyup( function() {
+		valida_email();
 	});
 	
 	/************************************************
 	 * Pagina: registration.html 
 	 */
 	// Validacao do campo nome
-	$("#tfnomecompleto").blur( function(){
-		var nome, dataNasc;
-		nome = $("#tfnomecompleto").val();
-		dataNasc = $("#dataNasc").val();
-		// alert(nome);
-		var partes = nome.trim().split(" ");
-		console.log("partes[0]: "+partes[0]+ " | tam: "+partes[0].length);
-		if ( partes.length < 2 ) { 
-			myInfo("#infonome", "Nome inválido. O nome deve conter pelo menos duas palavras, todas com no mínimo 3 caracteres.");
-		} else { // Temos 2 ou mais palavras
-			console.log ("tem pelo menos 2 palavras.");
-
-			var k = 0;
-			while ( k < partes.length ) { 
-				if ( partes[k].length < 3 ){
-					break;
-				}
-				k++; 
-			}
-			console.log("k = "+k+"    |   partes.length = "+partes.length);
-
-			if ( k != partes.length ) {
-				myInfo("#infonome", "Todas as palavras devem ter, no mínimo, 3 caracteres");
-			} else { // Temos pelo menos 2 palavras, todas com >= 3 caracteres
-				var success;
-				patt = RegExp ("^[a-zA-Z]");
-				for (var i = 0; i < partes.length; i++) {
-					if ( !patt.test(partes[i]) ) {
-						myInfo("#infonome", "Nome inválido. O primeiro caractere de cada palavra deve ser uma letra do alfabeto.");
-						success = false;
-						break;
-					}
-					partes[i] = partes[i].replace(/^[a-z]/, function myFunction(x){return x.toUpperCase();});
-	
-					success = true;
-				}
-
-				/// Debuging:
-				for (var i = 0; i < partes.length; i++) {
-					console.log("partes["+i+"]: "+partes[i]);
-				}
-
-				if ( success ) {
-					myInfoAccepted("#infonome", "ok!");
-				}
-			}
-
-		}
+	$("#tfnomecompleto").keyup( function(){
+		valida_nome();
 	});
 
 	//  Validacao do campo CPF
 	$("#tfcpf").blur( function() {
-		console.log("Validation CPF: "+$("#tfcpf").val());
-
-		if ( valida_cpf( $("#tfcpf").val() ) ) {
-			console.log("CPF válido");
-			myInfoAccepted("#infocpf", "CPF válido.");
-		} else {
-			console.log("CPF inválido");
-			myInfo("#infocpf", "CPF inválido.");
-		}
+		valida_cpf();
 	});
 	
 	// Validacao do campo data de nascimento
 	$("#dataNasc").blur( function() {
-		var dataNasc, base, limit, vDataNasc;
-		var patt;
-
-		// Data de Nascimento:
-		console.log("dataNasc.val() = "+$("#dataNasc").val());
-		if ( $("#dataNasc").val() == "" ){
-			myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
-		} else {
-			vDataNasc = $("#dataNasc").val().split("-");
-
-
-			dataNasc = new Date(vDataNasc[1]+" "+vDataNasc[2]+", "+vDataNasc[0]);
-
-			console.log("Year: "+dataNasc.getFullYear());
-			console.log("Month: "+dataNasc.getMonth());
-			console.log("Day: "+dataNasc.getDate());
-			console.log("dataNasc: "+vDataNasc[0]+", "+vDataNasc[1]+", " +vDataNasc[2] );
-
-			base = new Date("1 1, 1990"); // "M D, YYYY"
-			limit = new Date();	// current date
-			console.log("base.getFullYear() = "+base.getFullYear());
-			if ( dataNasc.getFullYear() < base.getFullYear() ) { // > 1990
-				myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
-			} else {
-				if ( dataNasc.getTime() > limit.getTime() ){ // > current date
-					myInfo("#infodatanasc", "Data inválida. A data máxima aceita é "+limit.getUTCDate()+"/"+(limit.getUTCMonth()+1)+"/"+limit.getFullYear());
-				} else {
-					myInfoAccepted("#infodatanasc", "ok");	
-				}
-			}
-		}
+		valida_data_nasc();
 	});
 	
 	// Validacao do campo sexo
 	$("#masculino").click( function() {
-		myInfoAccepted("#infosexo", "ok.");			
+		valida_sexo();
+	});
+	$("#feminino").click( function() {
+		valida_sexo();
+	});
+
+	// Validacao do campo cidade
+	$("#user_city").keyup( function() {
+		valida_cidade();
+	});
+
+	// Validacao do campo CEP
+	$("#user_zipcode").keyup( function() {
+		valida_cep();
 	});
 
 	$("#cadastrarbtn").click( function (){
-		// sexo
-		if ( !$("#masculino").checked && !$("#feminino").checked ) {
-			myInfo("#infosexo", "Selecione o sexo.");
-		} else {
-			myInfoAccepted("#infosexo", "ok.");
-		}
+		valida_nome();
+		valida_cpf();
+		valida_data_nasc();
+		valida_sexo();
+		valida_estado_civil();
 
-		// estado civil
-		if ( $("#marital_status").val() == "unknown" ) {
-			myInfo("#infoestadocivil", "Selecione o estado civil.");
-		} else {
-			myInfoAccepted("#infoestadocivil", "ok");
-		}
+		valida_cidade();
+		valida_estado();
+		valida_cep();
 
-		// estado
-		if ( $("#user_state").val() == "unknown" ) {
-			myInfo("#infoestado", "Selecione o estado.");
-		} else {
-			myInfoAccepted("#infoestado", "ok");
-		}
-
-		// cidade
-		if ( $("#cidade").val() == "" ) {
-			myInfo("#infocidade", "Digite o nome da cidade onde você reside.");
-		} else {
-			myInfoAccepted("#infocidade", "ok");
-		}
-
-
+		valida_email();
+		valida_senha();
 	});
 
 	$("#cancelarbtn").click( function (){
 		//TODO: apagar todos os info....
+		myInfoAccepted("#infonome", "");
+		myInfoAccepted("#infoemail", "");
+		myInfoAccepted("#infocpf", "");
+		myInfoAccepted("#infodatanasc", "");
+		myInfoAccepted("#infosexo", "");
+		myInfoAccepted("#infoestadocivil", "");
+		myInfoAccepted("#infoestado", "");
+		myInfoAccepted("#infocidade", "");
+		myInfoAccepted("#infocep", "");
 	});
 
 });
