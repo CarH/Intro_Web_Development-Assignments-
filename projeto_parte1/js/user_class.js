@@ -186,6 +186,11 @@ User.prototype.retrieveData = function()
 		flag_error = "user login informations are not defined. null value.";
 		return flag_error;
 	}
+	
+	if (typeof(Storage) == undefined) {
+		flag_error = "Your browser does not support Web Storage API";
+		return flag_error;
+	}
 
 	var primary_key = this.getEmail() + this.getPassword();
 	this.setName(localStorage.getItem("primary_key" + "name"));
@@ -217,6 +222,10 @@ User.prototype.retrieveData = function()
  */
 User.prototype.validateUser = function()
 {
+	if (typeof(Storage) == undefined) {
+		return 1;
+	}
+
 	var primary_key = this.getEmail() + this.getPassword();
 	var CPF = localStorage.getItem(primary_key + "cpf");
 	if (CPF == null || CPF == undefined) {
