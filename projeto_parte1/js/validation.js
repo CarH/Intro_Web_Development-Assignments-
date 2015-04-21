@@ -309,6 +309,39 @@ function valida_cidade () {
 
 /**
  *	Valida cep
+ *	Obs.: A validação foi realizada considerando a fonte:
+ *	http://mundoestranho.abril.com.br/materia/como-foram-definidos-e-o-que-significam-os-codigos-ddd-e-o-cep
+ 	
+NÚMERO - 0
+CEP - Grande São Paulo
+
+NÚMERO - 1
+CEP - Interior e litoral de São Paulo
+
+NÚMERO - 2
+CEP - Rio de Janeiro e Espírito Santo
+
+NÚMERO - 3
+CEP - Minas Gerais
+
+NÚMERO - 4
+CEP - Bahia e Sergipe
+
+NÚMERO - 5
+CEP - Alagoas, Pernambuco, Paraíba e Rio Grande do Norte
+
+NÚMERO - 6
+CEP - Ceará, Piauí, Maranhão, Pará, Amazonas, Acre, Amapá e Roraima
+
+NÚMERO - 7
+CEP - Distrito Federal, Goiás, Tocantins, Mato Grosso, Mato Grosso do Sul, Acre e Rondônia
+
+NÚMERO - 8
+CEP - Paraná e Santa Catarina
+
+NÚMERO - 9
+CEP - Rio Grande do Sul
+
  */
 function valida_cep () {
 	// TODO : de acordo com  o estado selecionado
@@ -326,10 +359,94 @@ function valida_cep () {
 
 }
 
-function valida_senha () {
+function verifica_senha () {
 	// TODO : checar se a senha corresponde com a confirmada
+	var senha, conf_senha, info;
+
+	senha = $("#user_password");
+	conf_senha = $("#conf_pass");
+	info = $("#infoconfsenha");
+
+	if ( senha.val() !== conf_senha.val() ) {
+		myInfo("#infoconfsenha", "A senha confirmada não corresponde com a senha informada.");		
+	} else {
+		myInfoAccepted("#infoconfsenha", "Senha confirmada corretamente.");
+	}
 }
 
+
+function valida_senha () {
+	var MIN_SIZE_PASS = 6;
+	var MAX_SIZE_PASS = 12;
+	var senha, patt, progress_bar, arrayRes, special_char, info;
+	var has2SpecialCar=false, has1SpecialCar=false, hasNumber=false, hasUpperCase=false, hasLowerCase=false;
+
+	senha = $("#user_password").val();
+	progress_bar = $("#progress_bar");
+	info = $("#infoprogbar");
+
+	// remove todas as classes de progress_bar:
+	progress_bar.removeClass();		
+
+	if ( senha.length < MIN_SIZE_PASS || senha.length > MAX_SIZE_PASS ) {
+		myInfo("#infosenha", "A senha deve ter de 6 a 12 caracteres!");
+		info.text("Força da senha");
+	} else {
+		myInfoAccepted("#infosenha", "");
+
+
+		/// Checagem 1: Presença de caracteres especiais:
+		patt = /[^a-zA-Z0-9]/g; // flag g ativada!
+		if ( (arrayRes = patt.exec(senha)) !== null ) {
+			special_char = arrayRes[0];
+			has1SpecialCar = true;
+			while ( (arrayRes = patt.exec(senha)) !== null ) {
+				if ( special_char !== arrayRes[0] ) {
+					// Há pelo menos 2 caract. especiais
+					has2SpecialCar = true;
+					console.log("TEM 2 caract especiais!!");
+				}
+				console.log("Capturou: "+arrayRes[0]);
+			}
+		}
+
+		/// Checagem 2: Presença de numeros:
+		patt = /[0-9]/;
+		if ( arrayRes = patt.test(senha) ) {
+			hasNumber = true;
+			console.log("hasNumber!");
+		}
+
+		/// Checagem 3: Presença de letras maiúsculas:
+		patt = /[A-Z]/;
+		if ( patt.test(senha) ) {
+			hasUpperCase = true;
+			console.log("hasUpperCase!");		
+		}
+
+		/// Checagem 4: Presença de letras minúsculas:
+		patt = /[a-z]/;
+		if ( patt.test(senha) ) {
+			hasLowerCase = true;
+			console.log("hasLowerCase!");	
+		}
+
+		if ( hasNumber && hasLowerCase && hasUpperCase && has2SpecialCar ) {
+			// Strong
+			progress_bar.addClass("strong");
+			info.text("Senha forte");
+		} else if ( hasNumber && (hasLowerCase || hasUpperCase) && has1SpecialCar ) {
+			// Medium
+			progress_bar.addClass("medium");
+			info.text("Senha média");
+		} else {
+			// Weak
+			progress_bar.addClass("weak");
+			info.text("Senha fraca");
+		}
+		console.log("senha.length = "+senha.length);	
+	}
+}
 
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
@@ -348,8 +465,14 @@ $(document).ready(function () {
 	$("#tfnomecompleto").keyup( function(){
 		valida_nome();
 	});
+	$("#tfnomecompleto").blur( function(){
+		valida_nome();
+	});
 
 	//  Validacao do campo CPF
+	$("#tfcpf").keyup( function() {
+		verifica_cpf();
+	});
 	$("#tfcpf").blur( function() {
 		valida_cpf();
 	});
@@ -377,6 +500,17 @@ $(document).ready(function () {
 		valida_cep();
 	});
 
+
+	// Validacao do campo senha
+	$("#user_password").keyup( function() {
+		valida_senha();
+	});
+
+	// verificacao do campo senha
+	$("#conf_pass").blur( function() {
+		verifica_senha();
+	});
+
 	$("#cadastrarbtn").click( function (){
 		valida_nome();
 		valida_cpf();
@@ -390,6 +524,7 @@ $(document).ready(function () {
 
 		valida_email();
 		valida_senha();
+		verifica_senha();
 	});
 
 	$("#cancelarbtn").click( function (){
@@ -403,6 +538,8 @@ $(document).ready(function () {
 		myInfoAccepted("#infoestado", "");
 		myInfoAccepted("#infocidade", "");
 		myInfoAccepted("#infocep", "");
+		myInfoAccepted("#infoprogbar", "");
+		myInfoAccepted("#infoconfsenha", "");
 	});
 
 });

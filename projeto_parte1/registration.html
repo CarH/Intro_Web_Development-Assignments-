@@ -11,14 +11,14 @@
 		<script src="js/validation.js"></script>	
 		<script src="js/layout_adjusts.js"></script>	
 		<script src="js/general_events_handler.js"></script>	
-		<!-- // <script src="js/cadastro_controller.js"></script> -->
-		<!-- // <script src="js/user_class.js"></script> -->
+		<script src="js/cadastro_controller.js"></script>
+		<script src="js/user_class.js"></script>
 		<script>
 			// Utilizei script interno pois cada página terá um background diferente. Se fosse inserir tudo num CSS externo o mesmo ficaria excessivamente grande.
 
 			$(document).ready( function(){
 
-				document.getElementById("register_body").style.backgroundImage = "url(img/campainha.jpg)";
+				document.getElementById("register_body").style.backgroundImage = "url(img/hotel2.jpg)";
 				
 			});
 
@@ -37,7 +37,7 @@
 					<legend>Informações Pessoais </legend>
 					<div id="nome">
 						<label> Nome completo </label> 
-						<input type="text" name="name" id="tfnomecompleto">
+						<input type="text" name="name" id="tfnomecompleto" autofocus>
 						<div id="infonome" class="error_msg"></div>
 					</div>
 	
@@ -133,12 +133,18 @@
 					<div id="senha">
 						<label> Senha </label> 
 						<input type="password" name="senha" id="user_password">
+						<div id="forcasenha">
+							<div class="container_progress_bar">
+								<div id="progress_bar"></div>
+							</div>
+							<div id="infoprogbar"> Força da senha </div>
+						</div>
 						<div id="infosenha" class="error_msg"></div>
 					</div>
 
 					<div id="confsenha">
 						<label> Confirme a senha </label> 
-						<input type="password" name="senha">
+						<input type="password" name="senha" id="conf_pass">
 						<div id="infoconfsenha" class="error_msg"></div>
 					</div>
 				</fieldset>

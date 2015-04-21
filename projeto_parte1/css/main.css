@@ -1,5 +1,5 @@
 * {
-   outline: 1px solid red !important;
+ 	/*outline: 1px solid red !important;*/
 }
 * {
     -webkit-box-sizing: border-box;
@@ -12,13 +12,14 @@
 }
 */
 body {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin: 0px;
 	width: 100%;
 	height: 100%;
 	min-width: 50%;
 	top: 0px;
 	background-repeat: no-repeat;
+	background-color: rgba(1, 1, 1, 0.5);;
 }
 
 p {
@@ -27,13 +28,14 @@ p {
 
 img {
 	height: 100%;
-	/*overflow: hidden;*/
+	overflow: hidden;
 }
 
 label {
 	/*float: left;*/
 	text-align: right;
 	margin-left: 5px;
+	padding-top: 12px;
 	padding: 1px;
 	font-size: 16px;
 }
@@ -51,7 +53,7 @@ textarea {
 
 .barfont {
 	color: white;
-	font-size: 16px;
+	font-size: 20px;
 }
 
 .color_font_pattern {
@@ -103,6 +105,12 @@ textarea {
 	float: left;
 }
 
+.hotel_font {
+	font-family: 'Poiret One', cursive;
+	font-size: 24px;
+	padding: inherit;
+}
+
 .nav_container>ul>li {	
 	display: inline;
 	padding-top: inherit;
@@ -119,10 +127,11 @@ textarea {
 }
 
 .nav_container>ul>li>a:hover {	
-	color: black;
-	background-color: white;
+	color: white;
+	text-shadow: 2px 1px 1px rgb(178, 178, 178);
 	-webkit-border-top-left-radius: 2px;
 	-webkit-border-bottom-right-radius: 2px;
+    
 }
 
 .error_msg {
@@ -159,7 +168,7 @@ textarea {
 	padding: 40px;
 	padding-top: 0px;
 	border-radius: 5%;
-	background-color: rgba(0, 0, 0, 0.5); 
+	background-color: rgba(0, 0, 0, 0.75); 
 }
 .formclass input {
 	width: 60%; /* largura do tf*/
@@ -188,18 +197,120 @@ textarea {
 
 fieldset {
 	margin-top: 10px;
+	width: 100%;
 }
 
-
-/**************** CONTACT PAGE ***************/
-
-#contactform input {
-	width: 60%; /* largura do tf*/
-	padding: 3px;
+#forcasenha {
+	width: inherit;
+	height: 30px;
+	/*padding: 3px;*/
 	display: block;
 }
 
-#como input {
+#forcasenha>div {
+	width: 60%;
+	float: left;
+	margin-top: 2px;
+}
+
+#infoprogbar {
+	float: left;
+	font-size: 10px;
+	font-style: italic;
+	border-bottom: 2px;
+}
+/***************************************************************************
+	Progress bar - baseado no código de:
+		Light CSS3 Loading Bars by MediaLoot
+		URL: http://medialoot.com/item/light-css3-loading-bars
+		Designer: Tony Thomas
+*/
+
+/*Style 16*/
+
+.container_progress_bar {
+	background-color:rgb(159,159,159);
+	width:60%;
+	height:9px;
+	border-color:rgb(150,150,150);
+	border-width:1px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px;
+	border-style: solid;
+	-moz-box-shadow:0px 1px 0px rgba(255,255,255,0.25) ,inset 0px 1px 2px rgba(0,0,0,0.5);
+	-webkit-box-shadow:0px 1px 0px rgba(255,255,255,0.25) ,inset 0px 1px 2px rgba(0,0,0,0.5);
+	box-shadow:0px 1px 0px rgba(255,255,255,0.25) ,inset 0px 1px 2px rgba(0,0,0,0.5);
+}
+
+.weak {
+	background-image:-moz-linear-gradient(1% 40% 0deg,rgb(255,10,10) 0%,rgb(255,10,10) 1%,rgb(199,20,14) 99%,rgb(199,20,14) 100%); 
+	background-image:-webkit-gradient(linear,1% 40%,99% 40%,color-stop(0, rgb(255,10,10)),color-stop(0.01, rgb(255,10,10)),color-stop(0.99, rgb(199,20,14)),color-stop(1, rgb(199,20,14)));
+	background-image:-webkit-linear-gradient(0deg,rgb(255,10,10) 0%,rgb(255,10,10) 1%,rgb(199,20,14) 99%,rgb(199,20,14) 100%);
+	background-image:-o-linear-gradient(0deg,rgb(255,10,10) 0%,rgb(255,10,10) 1%,rgb(199,20,14) 99%,rgb(199,20,14) 100%);
+	background-image:-ms-linear-gradient(0deg,rgb(255,10,10) 0%,rgb(255,10,10) 1%,rgb(199,20,14) 99%,rgb(199,20,14) 100%);
+	background-image:linear-gradient(0deg,rgb(255,10,10) 0%,rgb(255,10,10) 1%,rgb(199,20,14) 99%,rgb(199,20,14) 100%);
+	width: 33.3%;
+	height: 8px;
+	-moz-border-radius:5px 0px 0px 5px;
+	-webkit-border-radius:5px 0px 0px 5px;
+	border-radius:5px 0px 0px 5px;
+	-moz-box-shadow:inset 0px 1px 2px rgb(0,0,0);
+	-webkit-box-shadow:inset 0px 1px 2px rgb(0,0,0);
+	box-shadow:inset 0px 1px 2px rgb(0,0,0);
+	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff68767b,endColorstr=#ff828d91,GradientType=1)";
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff68767b,endColorstr=#ff828d91,GradientType=1);
+}
+
+/*Style 18*/
+
+.strong {
+	background-image:-moz-linear-gradient(1% 40% 0deg,rgb(0,128,255) 0%,rgb(0,128,255) 1%,rgb(0,191,255) 99%,rgb(0,191,255) 100%); 
+	background-image:-webkit-gradient(linear,1% 40%,99% 40%,color-stop(0, rgb(0,128,255)),color-stop(0.01, rgb(0,128,255)),color-stop(0.99, rgb(0,191,255)),color-stop(1, rgb(0,191,255)));
+	background-image:-webkit-linear-gradient(0deg,rgb(0,128,255) 0%,rgb(0,128,255) 1%,rgb(0,191,255) 99%,rgb(0,191,255) 100%);
+	background-image:-o-linear-gradient(0deg,rgb(0,128,255) 0%,rgb(0,128,255) 1%,rgb(0,191,255) 99%,rgb(0,191,255) 100%);
+	background-image:-ms-linear-gradient(0deg,rgb(0,128,255) 0%,rgb(0,128,255) 1%,rgb(0,191,255) 99%,rgb(0,191,255) 100%);
+	background-image:linear-gradient(0deg,rgb(0,128,255) 0%,rgb(0,128,255) 1%,rgb(0,191,255) 99%,rgb(0,191,255) 100%);
+	width: 100%;
+	height: 8px;
+	-moz-border-radius:5px 0px 0px 5px;
+	-webkit-border-radius:5px 0px 0px 5px;
+	border-radius:5px 0px 0px 5px;
+	-moz-box-shadow:inset 0px 1px 3px rgb(32,73,112);
+	-webkit-box-shadow:inset 0px 1px 3px rgb(32,73,112);
+	box-shadow:inset 0px 1px 3px rgb(32,73,112);
+	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff0080ff,endColorstr=#ff00bfff,GradientType=1)";
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff0080ff,endColorstr=#ff00bfff,GradientType=1);
+}
+
+/*Style 19*/
+
+.medium {
+	background-image:-moz-linear-gradient(1% 40% 0deg,rgb(92,181,25) 0%,rgb(92,181,25) 1%,rgb(217,242,153) 99%,rgb(217,242,153) 100%); 
+	background-image:-webkit-gradient(linear,1% 40%,99% 40%,color-stop(0, rgb(92,181,25)),color-stop(0.01, rgb(92,181,25)),color-stop(0.99, rgb(217,242,153)),color-stop(1, rgb(217,242,153)));
+	background-image:-webkit-linear-gradient(0deg,rgb(92,181,25) 0%,rgb(92,181,25) 1%,rgb(217,242,153) 99%,rgb(217,242,153) 100%);
+	background-image:-o-linear-gradient(0deg,rgb(92,181,25) 0%,rgb(92,181,25) 1%,rgb(217,242,153) 99%,rgb(217,242,153) 100%);
+	background-image:-ms-linear-gradient(0deg,rgb(92,181,25) 0%,rgb(92,181,25) 1%,rgb(217,242,153) 99%,rgb(217,242,153) 100%);
+	background-image:linear-gradient(0deg,rgb(92,181,25) 0%,rgb(92,181,25) 1%,rgb(217,242,153) 99%,rgb(217,242,153) 100%);
+	width: 66.6%;
+	height: 8px;
+	-moz-border-radius:5px 0px 0px 5px;
+	-webkit-border-radius:5px 0px 0px 5px;
+	border-radius:5px 0px 0px 5px;
+	-moz-box-shadow:inset 0px 1px 2px rgb(52,84,18);
+	-webkit-box-shadow:inset 0px 1px 2px rgb(52,84,18);
+	box-shadow:inset 0px 1px 2px rgb(52,84,18);
+	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff5cb519,endColorstr=#ffd9f299,GradientType=1)";
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ff5cb519,endColorstr=#ffd9f299,GradientType=1);
+}
+/**************************************************************************
+ Final do código de progress bar 
+ */
+
+
+
+/**************** CONTACT PAGE ***************/
+#como input { /* Para estruturar os checkboxes de 'Como nos conheceu' */
 	display: inline;
 	width: 15px;
 	height: 15px;
