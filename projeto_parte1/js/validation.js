@@ -1,24 +1,33 @@
+/**
+	Documento JavaScript : validation.js
+	
+	Este documento contém o código de validação de todos os formulários 
+	das páginas do site.
+
+	Decisão de projeto: devido ao fato de que páginas diferentes podem 
+	utilizar o mesmo código de valição, para evitar repetição desnecessária
+	de código utilizou-se um único arquivo de validação, que é importado
+	por todas as páginas que contêm formulários.
+*/
+
+
 // Validation Document
 function myInfo (element, text) {
+	var x;
+
 	$(element).text(text);
-	var x = $(element).css("color");
-	console.log("1");
-	console.log ("current_color = "+x);
-	console.log("element = "+element);
+	x = $(element).css("color");
 	if ( x === "rgb(0, 0, 255)" ){
-		console.log("class changed!");
 		$(element).toggleClass("blueText");
 	}
 }
 
 function myInfoAccepted (element, text) {
+	var x;
+
 	$(element).text(text);
-	var x = $(element).css("color");
-	console.log("2");
-	
-	console.log ("current_color = "+x);
+	x = $(element).css("color");
 	if ( x === "rgb(255, 0, 0)" ){
-		console.log("class changed!");
 		$(element).toggleClass("blueText");
 	}
 }
@@ -85,8 +94,6 @@ function calc_digitos_posicoes( digitos, posicoes, soma_digitos) {
 /*
  Valida CPF
  
- Valida se for CPF
- 
  @param  string cpf O CPF com ou sem pontos e traço
  @return bool True para CPF correto - False para CPF incorreto
 */
@@ -121,18 +128,23 @@ function mvalida_cpf ( valor ) {
 } // valida_cpf_ 
  
 /**
- *	Valida o nome 
+ *	Valida o nome completo, pág. registration.html
  */
-function valida_nome () {
-	var nome;
-	nome = $("#tfnomecompleto").val();
-
-	// alert(nome);
-	var partes = nome.trim();
+function valida_nome_completo () {
+	var nome, partes;
 	
+	nome = $("#tfnomecompleto").val().trim();
+
+	partes = nome;
+
 	console.log("partes(antes) = "+partes);
 	partes = partes.replace(/(\s|\t)+/g, " ");
 	console.log("partes(depois) = "+partes);
+
+	if ( partes == "" ) {
+		myInfo("#infonome", "O campo nome é de preenchimento obrigatório.");
+		return;
+	}
 
 	partes = partes.split(" ");
 	console.log("partes.length = "+partes.length);
@@ -182,36 +194,107 @@ function valida_nome () {
  *	Valida o email 
  */
 function valida_email () {
-	var email, passwd, patt;
+	var email, patt, counter=0;
 
-	email  = $("#tfemail").val();
-	passwd = $("#tfpassword").val();
-
-	// email:
-	patt = new RegExp("[a-z]");
-	if (patt.test(email[email.length-1])) {
-		patt = new RegExp("[a-z]([a-z0-9.]*[a-z0-9]+)?@[a-z0-9]+\\.([a-z0-9.]*)?[a-z0-9]+");
-		if ( patt.test(email) ){
-			console.log("Email ok!");
-			myInfoAccepted("#infoemail", "ok!");
-		} else {
-			myInfo("#infoemail", "Email não está no formato permitido.");
-			$("#tfemail").focus();
-		}
-	} else {
-		myInfo("#infoemail", "Email finalizado com caracter inválido: \""+email[email.length-1]+"\"");
-		$("#tfemail").focus();
-		console.log("email finalizado INCORRETAMENTE : \""+email[email.length-1]+"\"");
+	email  = $("#tfemail").val().trim();
+	console.log("email: "+email);
+	
+	if ( email == "" ) {
+		myInfo("#infoemail", "O campo email é de preenchimento obrigatório.");
+		// $("#tfemail").focus();
+		return;
 	}
+
+	/// Checagem 1: primeiro caracter deve ser uma letra
+	patt = /^[^a-z]/i; // i: flag case sensitive ativada
+	if ( patt.test(email) ) {
+		myInfo("#infoemail", "A primeira letra do email deve ser uma letra do alfabeto.");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 2: ausência de caracteres maiúsculos
+	patt = /[A-Z]/g;
+	if ( patt.test(email) ){
+		// console.log("Email deve conter apenas caracteres minúsculos.");
+		myInfo("#infoemail", "Email não pode conter caracteres maiúsculos.");
+		$("#tfemail").focus();
+		return;
+	} 
+
+	/// Checagem 3: deve haver apenas um caracter @
+	patt = /@/g; 
+	counter = 0;
+	while ( patt.exec(email) !== null ) {
+		counter++;	
+	}
+	if ( counter !== 1 ) {
+		myInfo("#infoemail", "Email deve conter um, e apenas um, caractere \"@\".");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 4: deve haver no mínimo um caracter "."
+	patt = /\./g; 
+	counter = 0;
+	while ( patt.exec(email) !== null ) {
+		counter++;	
+	}
+	if ( counter < 1 ) {
+		myInfo("#infoemail", "Email deve conter, no mínimo, um caractere \".\"");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 5: "." após o caracter @
+	patt = /[^@]+@[^\.]+(\.)+/g; 
+	if ( !patt.test(email) ) {
+		myInfo("#infoemail", "Email deve conter pelo menos um caractere \".\" após o \"@\".");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 6: ".@" ou "@." não são permitidos
+	patt = /(\.@|@\.|\.@\.)/g; 
+	if ( patt.test(email) ) {
+		myInfo("#infoemail", "Email pode não pode conter caractere \".\" adjacente ao caractere \"@\".");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 7: Email não pode ser finalizado com "." ou "@"
+	patt = new RegExp("[\.@]");
+	if ( patt.test(email[email.length-1]) ) {
+		myInfo("#infoemail", "Email não pode ser finalizado com \""+email[email.length-1]+"\"");
+		$("#tfemail").focus();
+		return;
+	}
+	myInfoAccepted("#infoemail", "ok!");
 }
 
 /**
  *	Valida o cpf
  */
 function valida_cpf () {
-	console.log("Validation CPF: "+$("#tfcpf").val());
+	var cpf, patt;
 
-	if ( mvalida_cpf( $("#tfcpf").val() ) ) {
+	cpf = $("#tfcpf").val().trim();
+	cpf = cpf.replace(/(-|\.)/g, "");
+
+	console.log("Validation CPF: "+cpf);
+
+	if ( cpf == "" ) {
+		myInfo("#infocpf", "O campo CPF é de preenchimento obrigatório.");
+		return;
+	}
+
+	patt = /[^0-9\/-]/g;
+	if ( patt.test (cpf) ) {
+		myInfo("#infocpf", "CPF pode conter apenas números ou números e \".\" e/ou \"-\".");
+		return;
+	}
+
+	if ( mvalida_cpf( cpf ) ) {
 		console.log("CPF válido");
 		myInfoAccepted("#infocpf", "CPF válido.");
 	} else {
@@ -341,21 +424,27 @@ CEP - Paraná e Santa Catarina
 
 NÚMERO - 9
 CEP - Rio Grande do Sul
-
+ TODO
  */
 function valida_cep () {
 	// TODO : de acordo com  o estado selecionado
-	var estado;
+	var estado, cep;
 
+	cep = $("#user_zipcode").val().trim();
 	estado = $("#user_state");
 	console.log("estado: "+estado.val());
 	if ( estado.val() == "unknown" ) {
 		myInfo("#infocep", "Informe primeiramente o estado.");
 		estado.focus();
 		return;
-	} else {
-		myInfoAccepted("#infocep", "");
 	}
+
+	if ( cep == "" ) {
+		myInfo("#infocep", "O campo CEP é de preenchimento obrigatório.");
+		return;
+	}		
+
+	myInfoAccepted("#infocep", "");
 
 }
 
@@ -366,6 +455,11 @@ function verifica_senha () {
 	senha = $("#user_password");
 	conf_senha = $("#conf_pass");
 	info = $("#infoconfsenha");
+
+	if ( conf_senha.val().length < 6 || conf_senha.val().length > 12) {
+		myInfo("#infoconfsenha", "A senha deve conter de 6 a 12 caracteres!");		
+		return;
+	}
 
 	if ( senha.val() !== conf_senha.val() ) {
 		myInfo("#infoconfsenha", "A senha confirmada não corresponde com a senha informada.");		
@@ -389,7 +483,7 @@ function valida_senha () {
 	progress_bar.removeClass();		
 
 	if ( senha.length < MIN_SIZE_PASS || senha.length > MAX_SIZE_PASS ) {
-		myInfo("#infosenha", "A senha deve ter de 6 a 12 caracteres!");
+		myInfo("#infosenha", "A senha deve conter de 6 a 12 caracteres!");
 		info.text("Força da senha");
 	} else {
 		myInfoAccepted("#infosenha", "");
@@ -448,6 +542,44 @@ function valida_senha () {
 	}
 }
 
+function clear_progress_bar () {
+	var progress_bar, info;
+	progress_bar = $("#progress_bar");
+	info = $("#infoprogbar");
+
+	// remove todas as classes de progress_bar:
+	progress_bar.removeClass();
+	info.text("Força da senha");
+}
+
+function valida_nome () {
+	var nome, partes, patt;
+	
+	nome = $("#tfnome").val().trim();
+	if ( nome == "" ) {
+		myInfo("#infonome", "O campo nome é de preenchimento obrigatório.");
+		return;
+	}
+
+	console.log("nome(antes) = "+nome);
+	nome = nome.replace(/(\s|\t)+/g, " ");
+	console.log("nome(depois) = "+nome);
+
+	/// Checagem 1: inicia com letra
+	patt = /^[^a-zA-Z]/g;
+	if ( patt.test(nome) ) {
+		myInfo("#infonome", "O nome deve iniciar com uma letra do alfabeto.");
+		return;
+	}
+
+	/// Checagem 2: pelo menos 3 caracteres
+	patt = /.{3,}/g;
+	if ( !patt.test(nome) ) {
+		myInfo("#infonome", "O nome deve conter ao menos três caracteres.");
+		return;
+	}
+}
+
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
 
@@ -457,21 +589,24 @@ $(document).ready(function () {
 	$("#tfemail").keyup( function() {
 		valida_email();
 	});
-	
+	$("#tfemail").blur( function() {
+		valida_email();
+	});
+
 	/************************************************
 	 * Pagina: registration.html 
 	 */
 	// Validacao do campo nome
 	$("#tfnomecompleto").keyup( function(){
-		valida_nome();
+		valida_nome_completo();
 	});
 	$("#tfnomecompleto").blur( function(){
-		valida_nome();
+		valida_nome_completo();
 	});
 
 	//  Validacao do campo CPF
 	$("#tfcpf").keyup( function() {
-		verifica_cpf();
+		valida_cpf();
 	});
 	$("#tfcpf").blur( function() {
 		valida_cpf();
@@ -490,6 +625,11 @@ $(document).ready(function () {
 		valida_sexo();
 	});
 
+	// Validacao do campo estado civil
+	$("#marital_status").blur( function () {
+		valida_estado_civil();
+	});
+
 	// Validacao do campo cidade
 	$("#user_city").keyup( function() {
 		valida_cidade();
@@ -499,20 +639,23 @@ $(document).ready(function () {
 	$("#user_zipcode").keyup( function() {
 		valida_cep();
 	});
-
+	$("#user_zipcode").focus( function() {
+		valida_cep();
+	});
 
 	// Validacao do campo senha
 	$("#user_password").keyup( function() {
 		valida_senha();
 	});
 
-	// verificacao do campo senha
+	// Verificacao do campo senha
 	$("#conf_pass").blur( function() {
 		verifica_senha();
 	});
 
 	$("#cadastrarbtn").click( function (){
-		valida_nome();
+		valida_nome_completo();
+		valida_email();
 		valida_cpf();
 		valida_data_nasc();
 		valida_sexo();
@@ -528,7 +671,7 @@ $(document).ready(function () {
 	});
 
 	$("#cancelarbtn").click( function (){
-		//TODO: apagar todos os info....
+		// Apaga todos os infos
 		myInfoAccepted("#infonome", "");
 		myInfoAccepted("#infoemail", "");
 		myInfoAccepted("#infocpf", "");
@@ -538,13 +681,22 @@ $(document).ready(function () {
 		myInfoAccepted("#infoestado", "");
 		myInfoAccepted("#infocidade", "");
 		myInfoAccepted("#infocep", "");
-		myInfoAccepted("#infoprogbar", "");
+		clear_progress_bar();
+		myInfoAccepted("#infosenha", "");
 		myInfoAccepted("#infoconfsenha", "");
 	});
 
+
+	/************************************************
+	 * Pagina: contact.html 
+	 */
+
+	 // Validacao do campo nome
+	$("#tfnome").keyup( function(){
+		valida_nome();
+	});
+	$("#tfnome").blur( function(){
+		valida_nome();
+	});
+
 });
-
-
-
-
-
