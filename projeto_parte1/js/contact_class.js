@@ -3,7 +3,7 @@ function Contact()
 	var user_name = "";
 	var user_mail = "";
 	var user_phone = "";
-	var advertising = [];
+	this.advertising = new Array(6);
 	var messageFromUser = "";
 }
 
@@ -37,7 +37,7 @@ Contact.prototype.setUserPhone = function(newUserPhone)
 	this.user_phone = newUserPhone;
 }
 
-Contact.prototype.getAdvertisingVector() = function()
+Contact.prototype.getAdvertisingVector = function()
 {
 	return this.advertising;
 }
@@ -72,11 +72,9 @@ Contact.prototype.setAdvertisingVectorAt = function(index, newValue)
 {
 	if (typeof newValue !== 'boolean')
 		return;
-
-	if (index < 0 || index >= this.advertising.length)
-		return null;
-	else
-		this.advertising[index] = newValue;
+	if (index < 0 || index > this.advertising.length)
+		return;
+	this.advertising[index] = newValue;
 }
 
 Contact.prototype.getMessageFromUser = function()
@@ -88,7 +86,6 @@ Contact.prototype.setMessageFromUser = function(newMessage)
 {
 	if (newMessage == null || newMessage == undefined)
 		return;
-
 	this.messageFromUser = newMessage;
 }
 
@@ -122,7 +119,13 @@ Contact.prototype.retrieveData = function()
 	this.setUserMail(localStorage.getItem("user_mail"));
 	this.setUserPhone(localStorage.getItem("user_phone"));
 	for (var counter = 0; counter < 6; counter++) {
-		this.setAdvertisingVectorAt(counter, localStorage.getItem("advertising[" + counter.toString() +"]"));
+		var strBoolean = localStorage.getItem("advertising[" + counter.toString() + "]");
+		strBoolean = strBoolean.toLowerCase();
+		if (!strBoolean.localeCompare("true"))
+			this.setAdvertisingVectorAt(counter, true);
+		else
+			this.setAdvertisingVectorAt(counter, false);
+		
 	}
 	this.setMessageFromUser(localStorage.getItem("user_msg"));
 }

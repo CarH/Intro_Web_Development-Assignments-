@@ -11,8 +11,10 @@ $(document).ready(function() {
 			} else {
 				new_contact.setAdvertisingVectorAt(counter, false);
 			}
+			counter++;
 		});
 		new_contact.setMessageFromUser($("#messageFromUser").val());
+		new_contact.saveData();
 		alert("Sua mensagem foi enviada! Em breve, estaremos lhe enviando a resposta");
 	});
 });
