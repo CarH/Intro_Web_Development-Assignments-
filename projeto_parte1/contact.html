@@ -9,7 +9,8 @@
 		<script src="js/general_events_handler.js"></script>	
 		<script src="js/layout_adjusts.js"></script>	
 		<script src="js/validation.js"></script>
-
+		<script src="js/contact_class.js"></script>
+		<script src="js/contact_controller.js"></script>
 		<script>
 			/* Utilizei script interno pois cada página terá um background diferente. Se fosse inserir tudo num CSS externo o mesmo ficaria excessivamente grande, além de dificultar a manutenibilidade. */
 
@@ -41,13 +42,13 @@
 	
 					<div id="email">
 						<label> Email </label> 
-						<input type="email" name="email">
+						<input type="email" name="email" id="user_mail">
 						<div id="infoemail" class="error_msg"></div>
 					</div>
 
 					<div id="celular">
 						<label> Telefone para contato </label> 
-						<input type="celular" name="celular">
+						<input type="celular" name="celular" id="user_phone">
 						<div id="infoemail" class="error_msg"></div>
 					</div>
 				</fieldset>
@@ -71,7 +72,7 @@
 
 				<fieldset>
 					<legend> Mensagem </legend>
-					<textarea name="msg" rows="10"></textarea>
+					<textarea name="msg" rows="10" id="messageFromUser"></textarea>
 				</fieldset>
 
 				<input type="submit" class="btnpattern" id="enviarbtn" value="Enviar">
