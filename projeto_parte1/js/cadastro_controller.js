@@ -13,9 +13,10 @@ $(document).ready(function(){
 		new_user.setCity($("#user_city").val());
 		new_user.setState($("#user_state").val());
 		new_user.setZipCode($("#user_zipcode").val());
-		new_user.setEmail($("#user_email").val());
+		new_user.setEmail($("#tfemail").val());
 		new_user.setPassword($("#user_password").val());
 		new_user.saveData();
-		alert("Seus dados foram salvos com sucesso.");
+		alert("Seus dados foram salvos com sucesso. Seu login pode ser efetuado normalmente.");
+		location.replace("www.google.com.br");
 	});
 });

@@ -6,7 +6,8 @@ $(document).ready(function() {
 		new_booking.setNumberOfAdults(parseInt($("#numberOfAdults").val()));
 		new_booking.setNumberOfBabies(parseInt($("#numberOfBabies").val()));
 		new_booking.setNumberOfChildren(parseInt($("#numberOfChildren").val()));
-		if(new_booking != null)
+		new_booking.saveData();
+		if(new_booking.isValidBooking())
 			alert("Sua reserva foi efetuada com sucesso.\n");
 		else
 			alert("Reserva não efetuada. Tente novamente mais tarde");

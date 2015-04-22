@@ -7,13 +7,14 @@ $(document).ready(function() {
 		login_try.setEmail(login_try_email);
 		login_try.setPassword(login_try_password);
 		login_try.validateUser();
-		if (login_try == null) {
+		if (!login_try.isValidUser()) {
 			alert("Usuário inexistente!\n");
 		} else {
 			/*Controller -> Model: state change
  			* once the user exists, then a method invocation 			
  			* is needed to do the state change.
  			*/
+			alert("Login efetuado com sucesso.");
 			login_try.retrieveData();
 		}
 	});

@@ -10,6 +10,7 @@ function Booking()
 	var nAdults = 0;
 	var nBabies = 0;
 	var nChildren = 0;
+	var validBooking = true;
 }
 
 /*object oriented programming: setters and getters to each property*/
@@ -66,6 +67,11 @@ Booking.prototype.setNumberOfChildren = function(newNumberOfChildren)
 		this.nChildren = newNumberOfChildren;	
 }
 
+Booking.prototype.isValidBooking = function()
+{
+	return this.validBooking;
+}
+
 /*
  * saveData: saves all the informations abou the last booking.
  *
@@ -92,8 +98,11 @@ Booking.prototype.saveData = function()
 		localStorage.setItem("adults", this.getNumberOfAdults().toString());
 		localStorage.setItem("babies", this.getNumberOfBabies().toString());
 		localStorage.setItem("children", this.getNumberOfChildren().toString());
+		this.validBooking = true;
+		return;
 	} else {
-		this = null;
+		this.validBooking = false;
+		return;
 	}
 }
 
@@ -115,14 +124,18 @@ Booking.prototype.retrieveData = function()
 	if (typeof(Storage) != undefined) {
 		var booking_exists = localStorage.getItem("checkin");
 		if (booking_exists == null || booking_exists == undefined) {
-			this = null;
+			this.validBooking = false;
+			return;
 		}
 		this.dateCheckIn = localStorage.getItem("checkin");
 		this.dateCheckOut = localStorage.getItem("checkout");
 		this.setNumberOfAdults(parseInt(localStorage.getItem("adults")));
 		this.setNumberOfBabies(parseInt(localStorage.getItem("babies")));
 		this.setNumberOfChildren(parseInt(localStorage.getItem("children")));
+		this.validBooking = true;
+		return;
 	} else {
-		this = null;
+		this.validBooking = false;
+		return;
 	}
 }
