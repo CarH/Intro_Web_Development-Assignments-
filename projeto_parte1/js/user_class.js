@@ -1,4 +1,3 @@
-
 /*
  * Definition of class User. ("Model"- MVC)
  */
@@ -138,8 +137,7 @@ User.prototype.isValidUser = function()
 User.prototype.saveData = function()
 {
 	if (typeof(Storage) != "undefined") {
-		localStorage.clear();
-		/* 			   	    			 
+	       /* 			   	    			 
    		*  the pair (email, password) forms an primary key, 
 		*  wich identifies an unique user in localStorage
  		*/
@@ -164,6 +162,7 @@ User.prototype.saveData = function()
 		return;
 	} else {
 		this.validUser = false;
+		return;
 	}
 }
 

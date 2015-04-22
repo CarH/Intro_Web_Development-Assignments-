@@ -16,6 +16,7 @@ $(document).ready(function(){
 		new_user.setEmail($("#tfemail").val());
 		new_user.setPassword($("#user_password").val());
 		new_user.saveData();
-		alert("Seus dados foram salvos com sucesso.");
+		alert("Seus dados foram salvos com sucesso. Seu login pode ser efetuado normalmente.");
+		location.replace("www.google.com.br");
 	});
 });

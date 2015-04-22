@@ -36,3 +36,19 @@ Lista de Testes:
 
 (Tour FedEx) - PERSISTÊNCIA DE DADOS
 
+-> tela de login
+	-> login de usuário existente. ok.
+	->login de usuário inexistente. ok.
+	-> login de múltiplos usuários existentes.  ok.
+	-> login de múltilplos usuários inexistentes. ok.
+	-> login de múltiplos usuários: existentes e inexistentes. ok.
+
+-> tela de cadastro
+	-> redirecionar para home.html
+	
+	
+
+->tela de reservas
+
+-> tela de contatos
+
