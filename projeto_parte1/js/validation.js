@@ -246,18 +246,18 @@ function valida_email () {
 		return;
 	}
 
-	/// Checagem 5: "." após o caracter @
-	patt = /[^@]+@[^\.]+(\.)+/g; 
-	if ( !patt.test(email) ) {
-		myInfo("#infoemail", "Email deve conter pelo menos um caractere \".\" após o \"@\".");
+	/// Checagem 6: ".@" ou "@." não são permitidos
+	patt = /((\.@)|(@\.))/g; 
+	if ( patt.test(email) ) {
+		myInfo("#infoemail", "Email pode não pode conter caractere \".\" adjacente ao caractere \"@\".");
 		$("#tfemail").focus();
 		return;
 	}
 
-	/// Checagem 6: ".@" ou "@." não são permitidos
-	patt = /(\.@|@\.|\.@\.)/g; 
-	if ( patt.test(email) ) {
-		myInfo("#infoemail", "Email pode não pode conter caractere \".\" adjacente ao caractere \"@\".");
+	/// Checagem 5: checa se tem "." após o caracter @
+	patt = /@([^\.]+)?(\.)+/g; 
+	if ( !patt.test(email) ) {
+		myInfo("#infoemail", "Email deve conter pelo menos um caractere \".\" após o \"@\".");
 		$("#tfemail").focus();
 		return;
 	}
@@ -294,13 +294,37 @@ function valida_cpf () {
 		return;
 	}
 
-	if ( mvalida_cpf( cpf ) ) {
+	if ( cpf.length > 11 ) {
+		myInfo("#infocpf", "CPF deve conter apenas 11 dígitos.");
+		return;
+	}
+
+	if ( cpf.length == 11 && mvalida_cpf( cpf ) ) {
 		console.log("CPF válido");
 		myInfoAccepted("#infocpf", "CPF válido.");
 	} else {
 		console.log("CPF inválido");
 		myInfo("#infocpf", "CPF inválido.");
 	}
+}
+
+/**
+ *	Formata o cpf
+ */
+function formata_cpf () {
+	var cpf, patt;
+	cpf = $("#tfcpf").val().trim();
+	cpf = cpf.replace(/(-|\.)/g, "");
+
+	if ( cpf.length == 3 || cpf.length == 6 ) {
+		$("#tfcpf").val( $("#tfcpf").val() + "\.");
+		return;
+	}
+	if ( cpf.length == 9 ) {
+		$("#tfcpf").val( $("#tfcpf").val() + "-");
+		return;	
+	}
+	valida_cpf();
 }
 
 /**
@@ -393,44 +417,43 @@ function valida_cidade () {
 /**
  *	Valida cep
  *	Obs.: A validação foi realizada considerando a fonte:
- *	http://mundoestranho.abril.com.br/materia/como-foram-definidos-e-o-que-significam-os-codigos-ddd-e-o-cep
- 	
-NÚMERO - 0
-CEP - Grande São Paulo
-
-NÚMERO - 1
-CEP - Interior e litoral de São Paulo
-
-NÚMERO - 2
-CEP - Rio de Janeiro e Espírito Santo
-
-NÚMERO - 3
-CEP - Minas Gerais
-
-NÚMERO - 4
-CEP - Bahia e Sergipe
-
-NÚMERO - 5
-CEP - Alagoas, Pernambuco, Paraíba e Rio Grande do Norte
-
-NÚMERO - 6
-CEP - Ceará, Piauí, Maranhão, Pará, Amazonas, Acre, Amapá e Roraima
-
-NÚMERO - 7
-CEP - Distrito Federal, Goiás, Tocantins, Mato Grosso, Mato Grosso do Sul, Acre e Rondônia
-
-NÚMERO - 8
-CEP - Paraná e Santa Catarina
-
-NÚMERO - 9
-CEP - Rio Grande do Sul
- TODO
+ *	http://www.geradordecep.com.br/ , provida pelo PAE
  */
 function valida_cep () {
 	// TODO : de acordo com  o estado selecionado
-	var estado, cep;
+	var estado, cep, patt;
+	var mHash = {};
+
+	mHash['sp'] = [0, 1];
+	mHash['rj'] = [2];
+	mHash['es'] = [2];
+	mHash['mg'] = [3];
+	mHash['ba'] = [4];
+	mHash['se'] = [4];
+	mHash['pe'] = [5];
+	mHash['al'] = [5];
+	mHash['pb'] = [5];
+	mHash['rn'] = [5];
+	mHash['ce'] = [6];
+	mHash['pi'] = [6];
+	mHash['ma'] = [6];
+	mHash['pa'] = [6];
+	mHash['am'] = [6];
+	mHash['ac'] = [6];
+	mHash['ap'] = [6];
+	mHash['rr'] = [6];
+	mHash['go'] = [7];
+	mHash['to'] = [7];
+	mHash['mt'] = [7];
+	mHash['ms'] = [7];
+	mHash['ro'] = [7];
+	mHash['df'] = [7];
+	mHash['pr'] = [8];
+	mHash['sc'] = [8];
+	mHash['rs'] = [9];
 
 	cep = $("#user_zipcode").val().trim();
+	cep = cep.replace(/-/g, "");
 	estado = $("#user_state");
 	console.log("estado: "+estado.val());
 	if ( estado.val() == "unknown" ) {
@@ -442,10 +465,53 @@ function valida_cep () {
 	if ( cep == "" ) {
 		myInfo("#infocep", "O campo CEP é de preenchimento obrigatório.");
 		return;
-	}		
+	}	
 
-	myInfoAccepted("#infocep", "");
+	patt = /[^0-9]/g;
+	if ( patt.test(cep) ) {
+		myInfo("#infocep", "O CEP é composto de números apenas.");
+		return;
+	}
 
+	console.log("mHash[estado].length = "+mHash[estado.val()].length );
+	for(var i = 0; i < mHash[estado.val()].length; i++) {
+		if ( cep[0] == mHash[estado.val()][i]) {
+			myInfoAccepted("#infocep", "ok");
+			return;
+		}
+	}
+	myInfo("#infocep", "CEP inválido.");
+	
+}
+
+function formata_cep () {
+	var cep, patt;
+
+	cep = $("#user_zipcode").val().trim();
+	cep = cep.replace(/-/g, "");
+	console.log("cep : "+cep);
+
+	/// Checagem 1: testa se tem algum caracter diferente de números
+	patt = /[^0-9]/g;
+	if ( patt.test(cep) ) {
+		myInfo("#infocep", "O CEP é composto de números apenas.");
+		return;
+	}
+
+	/// Checagem 2: insere "-"
+	if ( cep.length == 5 ) {
+		console.log("Inserindo -")
+		$("#user_zipcode").val( $("#user_zipcode").val()+"-" );
+	}
+	
+	/// Checagem 3: quantidade de números <= 8
+	if ( cep.length == 8) {
+		valida_cep();
+		return;
+	} else {
+		myInfo("#infocep", "O CEP é composto de 8 dígitos.");
+		return;
+	}
 }
 
 function verifica_senha () {
@@ -578,7 +644,11 @@ function valida_nome () {
 		myInfo("#infonome", "O nome deve conter ao menos três caracteres.");
 		return;
 	}
+	myInfoAccepted("#infonome", "ok");
+
 }
+
+
 
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
@@ -606,7 +676,7 @@ $(document).ready(function () {
 
 	//  Validacao do campo CPF
 	$("#tfcpf").keyup( function() {
-		valida_cpf();
+		formata_cpf();
 	});
 	$("#tfcpf").blur( function() {
 		valida_cpf();
@@ -637,9 +707,9 @@ $(document).ready(function () {
 
 	// Validacao do campo CEP
 	$("#user_zipcode").keyup( function() {
-		valida_cep();
+		formata_cep();
 	});
-	$("#user_zipcode").focus( function() {
+	$("#user_zipcode").blur( function() {
 		valida_cep();
 	});
 
@@ -691,12 +761,16 @@ $(document).ready(function () {
 	 * Pagina: contact.html 
 	 */
 
-	 // Validacao do campo nome
+	// Validacao do campo nome
 	$("#tfnome").keyup( function(){
 		valida_nome();
 	});
 	$("#tfnome").blur( function(){
 		valida_nome();
 	});
+
+	// Validacao do campo telefone
+	// $("#user_phone").keyup( )
+
 
 });
