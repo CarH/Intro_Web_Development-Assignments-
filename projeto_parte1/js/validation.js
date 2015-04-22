@@ -332,7 +332,7 @@ function formata_cpf () {
  *	Valida data de nascimento
  */
 function valida_data_nasc () {
-	var dataNasc, base, limit, vDataNasc;
+	var dataNasc, base, limit, vDataNasc, dataStr;
 	var patt;
 
 	console.log("dataNasc.val() = "+$("#dataNasc").val());
@@ -340,7 +340,9 @@ function valida_data_nasc () {
 	if ( $("#dataNasc").val() == "" ){
 		myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
 	} else {
-		vDataNasc = $("#dataNasc").val().split("-");
+		dataStr = $("#dataNasc").val();
+		dataStr = dataStr.replace(/(\/\.)/g, "-"); // para o firefox
+		vDataNasc = dataStr.split("-");
 
 		dataNasc = new Date(vDataNasc[1]+" "+vDataNasc[2]+", "+vDataNasc[0]);
 
@@ -725,45 +727,99 @@ function valida_como_conheceu () {
 	myInfoAccepted("#infocomonosconheceu", "ok");
 }
 
-function valida_data_entrada () {
-	var entrada, atual, vdataentrada, dataentrada, intervalo;
+function valida_data_geral (element, infoelement) {
+	var entrada, patt, aux;
 
-	entrada = $("#tfdataentrada").val();
+	entrada = $(element).val().trim();
 
-	console.log("tfdataentrada.val() = "+entrada);
-	// Data de Nascimento:
-	if ( entrada == "" ){
-		myInfo("#infotfdataentrada", "Data inválida.");
-	} else {
-		// var date = new Date('2011','01','02');
-		// alert('the original date is '+date);
-		// var newdate = new Date(date);
+	console.log("data = "+entrada);
 
-		// newdate.setDate(newdate.getDate() - 7); // minus the date
+	aux = entrada.replace(/(\/|\-)/g, "");
+	alert(aux);
+	/// Checagem 1: vazio
+	if ( aux == "" ){
+		myInfo(infoelement, "Data de entrada é de preenchimento obrigatório."); // TODO: ver data de entrada a
+		return false;
+	} 
 
-		// var nd = new Date(newdate);
-		// alert('the new date is '+nd);​
-
-		vdataentrada = entrada.split("-");
-
-		dataentrada = new Date(vdataentrada[1]+" "+vdataentrada[2]+", "+vdataentrada[0]); // "M D, YYYY"
-		atual = new Date();				// get current date
-		intervalo = new Date(dataentrada - atual);
-		console.log("Year: "+dataentrada.getFullYear());
-		console.log("Month: "+dataentrada.getMonth());
-		console.log("Day: "+dataentrada.getDate());
-
-
-		console.log("-- INtervalo :" + (new Date(intervalo)).getUTCDate() );		
-		console.log("Year: "+intervalo.getFullYear());
-		console.log("Month: "+intervalo.getMonth());
-		console.log("Day: "+intervalo.getDate());
-
-
-		// base = new Date("1 1, 1990");	// "M D, YYYY"
+	/// Checagem 2: caracter inválido
+	patt = /[^0-9\-]/g; // TODO
+	if ( patt.test(aux) ){
+		myInfo(infoelement, "O campo data contém caracteres inválidos.");
+		return false;
 	}
 
+	/// Checagem 3: TAMANHO	
+	if ( aux.length  > 8 ){
+		myInfo(infoelement, "Data inválida.");
+		return false;
+	}
+	myInfo(infoelement, "");
+	return true;
 }
+
+function valida_data_entrada () {
+	var entrada, vdataentrada, dataentrada, dataminima;
+
+	entrada = $("#tfdataentrada").val().trim();
+
+	console.log("data entrada = "+entrada);
+
+	vdataentrada = entrada.split("-");
+	dataentrada = new Date(vdataentrada[1]+" "+vdataentrada[2]+", "+vdataentrada[0]); // "M D, YYYY"
+	console.log("vdataentrada[1]: "+vdataentrada[1]);
+
+	dataminima = new Date();						// get current date
+	dataminima.setDate( dataminima.getDate() + 2 ); // Adding 2 days to the current date
+
+	console.log("-- MIN DATE : ");		
+	console.log("Year: "+dataminima.getFullYear());
+	console.log("Month: "+dataminima.getMonth());
+	console.log("Day: "+dataminima.getDate());
+	
+	if ( dataentrada < dataminima ) {
+		myInfo("#infodataentrada", "Data de entrada deve possuir, no mínimo dois dias a mais do que a data atual.");
+	} else {
+		myInfoAccepted("#infodataentrada", "ok");
+	}
+	
+}
+
+function valida_data_saida () {
+	var entrada, saida, vdataentrada, vdatasaida, dataentrada, datasaida, dataminima;
+
+	entrada = $("#tfdataentrada").val().trim();
+	saida = $("#tfdatasaida").val().trim();
+
+	console.log("data entrada = "+entrada);
+	console.log("data saida = "+saida);
+
+	vdataentrada = entrada.split("-");
+	vdatasaida = saida.split("-");
+	dataminima = new Date(vdataentrada[1]+" "+vdataentrada[2]+", "+vdataentrada[0]); // "M D, YYYY"
+	datasaida = new Date(vdatasaida[1]+" "+vdatasaida[2]+", "+vdatasaida[0]); // "M D, YYYY"
+
+	// dataminima = new Date();
+	dataminima.setDate( dataminima.getDate() + 2 ); // add 2 dias a data de entrada
+
+	console.log("-- DATA SAIDA : ");	
+	console.log("Year: "+datasaida.getFullYear());
+	console.log("Month: "+datasaida.getMonth());
+	console.log("Day: "+datasaida.getDate());
+
+
+	console.log("-- DATA Minima : ");		
+	console.log("Year: "+dataminima.getFullYear());
+	console.log("Month: "+dataminima.getMonth());
+	console.log("Day: "+dataminima.getDate());
+	
+	if ( datasaida < dataminima ) {
+		myInfo("#infodatasaida", "Data de saída deve possuir, no mínimo, dois dias a mais do que a data de entrada.");
+	} else {
+		myInfoAccepted("#infodatasaida", "ok");
+	}
+}
+
 
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
@@ -838,6 +894,7 @@ $(document).ready(function () {
 		verifica_senha();
 	});
 
+	// TODO : Mudar para onsubmit
 	$("#cadastrarbtn").click( function() {
 		valida_nome_completo();
 		valida_email();
@@ -902,11 +959,31 @@ $(document).ready(function () {
 	});
 
 	/************************************************
-	 * Pagina: booking.html 
+	 * Pagina: bookings.html 
 	 */
 
-	 
-	 $("#tfdataentrada").keyup( function() {
-	 	valida_data_entrada();
-	 });
+
+	$("#tfdataentrada").keyup( function() {
+		if ( valida_data_geral("#tfdataentrada", "#infodataentrada") ){
+			valida_data_entrada();
+		}
+	});
+	$("#tfdataentrada").blur( function() {
+		if ( valida_data_geral("#tfdataentrada", "#infodataentrada") ){
+			valida_data_entrada();
+		}
+	});
+
+
+	$("#tfdatasaida").keyup( function() {
+	 	if ( valida_data_geral("#tfdatasaida", "#infodatasaida") ){
+			valida_data_saida();
+	 	}
+	});
+	$("#tfdatasaida").blur( function() {
+		if ( valida_data_geral("#tfdatasaida", "#infodatasaida") ){
+			valida_data_saida();
+		}
+	});
+
 });
