@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	//se der problemas de jQuery, criar um handler para evento de campos validados
 	$("#cadastrarbtn").click(function() {
 		var new_user = new User();
 		new_user.setName($("#tfnomecompleto").val());
@@ -17,5 +16,6 @@ $(document).ready(function(){
 		new_user.setEmail($("#user_email").val());
 		new_user.setPassword($("#user_password").val());
 		new_user.saveData();
+		alert("Seus dados foram salvos com sucesso.");
 	});
 });

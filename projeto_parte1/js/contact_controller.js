@@ -15,6 +15,6 @@ $(document).ready(function() {
 		});
 		new_contact.setMessageFromUser($("#messageFromUser").val());
 		new_contact.saveData();
-		alert("Sua mensagem foi enviada! Em breve, estaremos lhe enviando a resposta");
+		alert("Sua mensagem foi enviada! Em breve, estaremos lhe enviando a resposta.");
 	});
 });

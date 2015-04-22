@@ -6,8 +6,8 @@ $(document).ready(function() {
 		var login_try = new User();
 		login_try.setEmail(login_try_email);
 		login_try.setPassword(login_try_password);
-		var login_log = login_try.validateUser();
-		if (login_log == 1) {
+		login_try.validateUser();
+		if (login_try == null) {
 			alert("Usuário inexistente!\n");
 		} else {
 			/*Controller -> Model: state change

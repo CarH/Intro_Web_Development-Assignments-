@@ -12,7 +12,6 @@ function Booking()
 	var nChildren = 0;
 }
 
-
 /*object oriented programming: setters and getters to each property*/
 Booking.prototype.getDateCheckIn = function()
 {
@@ -75,9 +74,9 @@ Booking.prototype.setNumberOfChildren = function(newNumberOfChildren)
  * 		This function is a method of Booking class and cannot be
  * 		called directly from the view, once implemented the 
  * 		MVC desing pattern.
+ * 		If any error occurred, the instance of 	Booking goes to null.
  *
- * return: flag error, containing the log message, if any error
- *         occured.
+ * return: void.
  *
  * FIXME: In this implementation, only the last booking can be retrieved.
  *
@@ -87,7 +86,6 @@ Booking.prototype.setNumberOfChildren = function(newNumberOfChildren)
  */
 Booking.prototype.saveData = function()
 {
-	var flag_error = "";
 	if (typeof(Storage) != undefined) {
 		localStorage.setItem("checkin", this.getDateCheckIn());
 		localStorage.setItem("checkout", this.getDateCheckOut());
@@ -95,8 +93,7 @@ Booking.prototype.saveData = function()
 		localStorage.setItem("babies", this.getNumberOfBabies().toString());
 		localStorage.setItem("children", this.getNumberOfChildren().toString());
 	} else {
-		flag_error = "Your browser does not support the Web Storage API";
-		return flag_error;
+		this = null;
 	}
 }
 
@@ -105,32 +102,27 @@ Booking.prototype.saveData = function()
  *
  * description: all the properties of the booking's instance are filled
  * 		by retrieving all the informations about the last booking
- * 		made on he browser (data saved using the Web Storage API)
+ * 		made on he browser (data saved using the Web Storage API).
+ * 		In case of error (i.e.: the browser does not support the
+ * 		Web Storage API or the booking does not exist, the instance
+ * 		of object goes to null, doing this way, we are following the
+ * 		MVC design pattern).
  *
- * returns: -1, if the booking does not exist,
- * 	    1, if the browser does not support the Web Storage API
- * 	    0, otherwise.
- *
- * XXX: verify if the returning type from the function violates
- * 	the MVC design pattern.
+ * returns:  void.
  */
 Booking.prototype.retrieveData = function()
 {
-	var flag_error;
 	if (typeof(Storage) != undefined) {
 		var booking_exists = localStorage.getItem("checkin");
 		if (booking_exists == null || booking_exists == undefined) {
-			flag_error = -1;
-			return flag_error;
+			this = null;
 		}
 		this.dateCheckIn = localStorage.getItem("checkin");
 		this.dateCheckOut = localStorage.getItem("checkout");
 		this.setNumberOfAdults(parseInt(localStorage.getItem("adults")));
 		this.setNumberOfBabies(parseInt(localStorage.getItem("babies")));
 		this.setNumberOfChildren(parseInt(localStorage.getItem("children")));
-		flag_error = 0;
-		return flag_error;		
 	} else {
-			flag_error = 1;
+		this = null;
 	}
 }

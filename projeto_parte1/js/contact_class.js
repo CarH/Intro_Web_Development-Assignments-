@@ -1,3 +1,6 @@
+/*
+ * Definition of class Contact. ("Model"- MVC)
+ */
 function Contact()
 {
 	var user_name = "";
@@ -7,6 +10,7 @@ function Contact()
 	var messageFromUser = "";
 }
 
+/*object-oriented programming: setters and getters to each property*/
 Contact.prototype.getUserName = function()
 {
 	return this.user_name;
@@ -60,6 +64,17 @@ Contact.prototype.setAdvertisingVector = function(newAdvertisingVector)
 	}
 }
 
+/*
+ * getAdvertisingVectorAt: returns the value of this.advertising[index]
+ *
+ * description: once advertising is an array of boolean values, this method
+ * 		try to access the element in the position equals the index.
+ *
+ * parameters: index, indicating the position of the required element
+ *
+ * returns: null, if the position does not exist or is invalid.
+ * 	    the element accessed, otherwise.
+ */
 Contact.prototype.getAdvertisingVectorAt = function(index)
 {
 	if (index < 0 || index >= this.advertising.length)
@@ -68,6 +83,20 @@ Contact.prototype.getAdvertisingVectorAt = function(index)
 		return this.advertising[index];
 }
 
+/*
+ * setAdvertisingVectorAt: set a new value for this.advertising[index]
+ *
+ * description: once advertising is an array of boolean values, this method
+ * 		try to acces the array in the index-th position and change
+ * 		its value.
+ *
+ * parameters: index, indicating the position of the array that will receive 
+ * 	       the new value.
+ * 	       newValue, indicating the new value that the element at
+ * 	       index-th position will store.
+ *
+ * returns: void.
+ */
 Contact.prototype.setAdvertisingVectorAt = function(index, newValue)
 {
 	if (typeof newValue !== 'boolean')
@@ -89,15 +118,22 @@ Contact.prototype.setMessageFromUser = function(newMessage)
 	this.messageFromUser = newMessage;
 }
 
+/*
+ * saveData: saves all the contact informations.
+ *
+ * description: using the Web Storage API, all the data inserted by
+ *		user at view of contact page, are saved locally
+ *		and permanently. This function is a method of Contact class
+ *		and cannot be called directly by the view, once implemented
+ *		the MVC design pattern.
+ *
+ * return: void.
+ */
 Contact.prototype.saveData = function()
 {
 	if (typeof(Storage) == undefined) {
 		return;
 	}
-
-	// problema: novamente a unicidade da info.
-	// um usuario pode enviar mais de uma msg a um hotel
-	// e uma mesma msg pode ter sido enviada por de um usuario
 	
 	localStorage.setItem("user_name", this.getUserName());
 	localStorage.setItem("user_mail", this.getUserMail());
@@ -109,6 +145,18 @@ Contact.prototype.saveData = function()
 	localStorage.setItem("user_msg", this.getMessageFromUser());
 }
 
+
+/*
+ * retriveData: recovers all the data previously saved.
+ *
+ * description: this function recovers all the data - about a instance of a contact -
+ * 		saved in the localStorage. All the data recovered is about the last
+ * 		contact made through the contact form (View Contact, in MVC terms).
+ * 		Note that, once implemented the MVC design pattern, this method
+ * 		shall not be called from the view.
+ *
+ * return: void.
+ */
 Contact.prototype.retrieveData = function()
 {
 	if (typeof(Storage) == undefined) {
