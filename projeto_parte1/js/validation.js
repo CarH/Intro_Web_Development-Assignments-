@@ -735,7 +735,7 @@ function valida_data_geral (element, infoelement) {
 	console.log("data = "+entrada);
 
 	aux = entrada.replace(/(\/|\-)/g, "");
-	alert(aux);
+	// alert(aux);
 	/// Checagem 1: vazio
 	if ( aux == "" ){
 		myInfo(infoelement, "Data de entrada é de preenchimento obrigatório."); // TODO: ver data de entrada a
