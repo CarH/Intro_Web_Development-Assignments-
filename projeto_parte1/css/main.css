@@ -44,6 +44,18 @@ textarea {
 	width: 100%;
 }
 
+
+.copy_right {
+	bottom: 0;
+	position: fixed;
+	margin-left: 40%;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: 'Poiret One', cursive;
+}
+
+
 .center {
     margin-left: 25%;
     margin-right: 25%;
@@ -134,7 +146,6 @@ textarea {
 	-moz-border-top-left-radius: 2px;
 	-webkit-border-bottom-right-radius: 2px;
 	-moz-border-bottom-right-radius: 2px;
-    
 }
 
 .error_msg {
@@ -165,13 +176,15 @@ textarea {
 .formclass {
 	float: left;
 	margin: 10px;
-	margin-left: 25%;/* se tirar o placeholder poe isso! */
+	margin-left: 25%;/* placeholder! */
+	margin-right: 25%;/*placeholder! */
 	min-width: 379px;
 	width: 50%;
 	padding: 40px;
 	padding-top: 0px;
 	border-radius: 5%;
 	background-color: rgba(0, 0, 0, 0.75); 
+	box-shadow: 5px 5px 5px rgba(1,1,1,0.3);
 }
 .formclass input {
 	width: 60%; /* largura do tf*/

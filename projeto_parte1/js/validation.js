@@ -32,100 +32,6 @@ function myInfoAccepted (element, text) {
 	}
 }
 
-/*
- calc_digitos_posicoes
- 
- Multiplica dígitos vezes posições
- 
- @param string digitos Os digitos desejados
- @param string posicoes A posição que vai iniciar a regressão
- @param string soma_digitos A soma das multiplicações entre posições e dígitos
- @return string Os dígitos enviados concatenados com o último dígito
-*/
-function calc_digitos_posicoes( digitos, posicoes, soma_digitos) {
- 
-    // Garante que o valor é uma string
-    digitos = digitos.toString();
- 
-    // Faz a soma dos dígitos com a posição
-    // Ex. para 10 posições:
-    //   0    2    5    4    6    2    8    8   4
-    // x10   x9   x8   x7   x6   x5   x4   x3  x2
-    //   0 + 18 + 40 + 28 + 36 + 10 + 32 + 24 + 8 = 196
-    for ( var i = 0; i < digitos.length; i++  ) {
-        // Preenche a soma com o dígito vezes a posição
-        soma_digitos = soma_digitos + ( digitos[i] * posicoes );
- 
-        // Subtrai 1 da posição
-        posicoes--;
- 
-        // Parte específica para CNPJ
-        // Ex.: 5-4-3-2-9-8-7-6-5-4-3-2
-        if ( posicoes < 2 ) {
-            // Retorno a posição para 9
-            posicoes = 9;
-        }
-    }
- 
-    // Captura o resto da divisão entre soma_digitos dividido por 11
-    // Ex.: 196 % 11 = 9
-    soma_digitos = soma_digitos % 11;
- 
-    // Verifica se soma_digitos é menor que 2
-    if ( soma_digitos < 2 ) {
-        // soma_digitos agora será zero
-        soma_digitos = 0;
-    } else {
-        // Se for maior que 2, o resultado é 11 menos soma_digitos
-        // Ex.: 11 - 9 = 2
-        // Nosso dígito procurado é 2
-        soma_digitos = 11 - soma_digitos;
-    }
- 
-    // Concatena mais um dígito aos primeiro nove dígitos
-    // Ex.: 025462884 + 2 = 0254628842
-    var cpf = digitos + soma_digitos;
- 
-    // Retorna
-    return cpf;
-    
-} // calc_digitos_posicoes
- 
-/*
- Valida CPF
- 
- @param  string cpf O CPF com ou sem pontos e traço
- @return bool True para CPF correto - False para CPF incorreto
-*/
-function mvalida_cpf ( valor ) {
- 
-    // Garante que o valor é uma string
-    valor = valor.toString();
-    
-    // Remove caracteres inválidos do valor
-    valor = valor.replace(/[^0-9]/g, '');
- 
- 
-    // Captura os 9 primeiros dígitos do CPF
-    // Ex.: 02546288423 = 025462884
-    var digitos = valor.substr(0, 9);
- 
-    // Faz o cálculo dos 9 primeiros dígitos do CPF para obter o primeiro dígito
-    var novo_cpf = calc_digitos_posicoes( digitos, 10, 0 );
- 
-    // Faz o cálculo dos 10 dígitos do CPF para obter o último dígito
-    var novo_cpf = calc_digitos_posicoes( novo_cpf, 11, 0 );
- 
-    // Verifica se o novo CPF gerado é idêntico ao CPF enviado
-    if ( novo_cpf === valor ) {
-        // CPF válido
-        return true;
-    } else {
-        // CPF inválido
-        return false;
-    }
-    
-} // valida_cpf_ 
  
 /**
  *	Valida o nome completo, pág. registration.html
@@ -270,6 +176,101 @@ function valida_email () {
 		return;
 	}
 	myInfoAccepted("#infoemail", "ok!");
+}
+
+
+/*
+ calc_digitos_posicoes
+ 
+ Multiplica dígitos vezes posições
+ 
+ @param string digitos Os digitos desejados
+ @param string posicoes A posição que vai iniciar a regressão
+ @param string soma_digitos A soma das multiplicações entre posições e dígitos
+ @return string Os dígitos enviados concatenados com o último dígito
+*/
+function calc_digitos_posicoes( digitos, posicoes, soma_digitos) {
+ 
+    // Garante que o valor é uma string
+    digitos = digitos.toString();
+ 
+    // Faz a soma dos dígitos com a posição
+    // Ex. para 10 posições:
+    //   0    2    5    4    6    2    8    8   4
+    // x10   x9   x8   x7   x6   x5   x4   x3  x2
+    //   0 + 18 + 40 + 28 + 36 + 10 + 32 + 24 + 8 = 196
+    for ( var i = 0; i < digitos.length; i++  ) {
+        // Preenche a soma com o dígito vezes a posição
+        soma_digitos = soma_digitos + ( digitos[i] * posicoes );
+ 
+        // Subtrai 1 da posição
+        posicoes--;
+ 
+        // Parte específica para CNPJ
+        // Ex.: 5-4-3-2-9-8-7-6-5-4-3-2
+        if ( posicoes < 2 ) {
+            // Retorno a posição para 9
+            posicoes = 9;
+        }
+    }
+ 
+    // Captura o resto da divisão entre soma_digitos dividido por 11
+    // Ex.: 196 % 11 = 9
+    soma_digitos = soma_digitos % 11;
+ 
+    // Verifica se soma_digitos é menor que 2
+    if ( soma_digitos < 2 ) {
+        // soma_digitos agora será zero
+        soma_digitos = 0;
+    } else {
+        // Se for maior que 2, o resultado é 11 menos soma_digitos
+        // Ex.: 11 - 9 = 2
+        // Nosso dígito procurado é 2
+        soma_digitos = 11 - soma_digitos;
+    }
+ 
+    // Concatena mais um dígito aos primeiro nove dígitos
+    // Ex.: 025462884 + 2 = 0254628842
+    var cpf = digitos + soma_digitos;
+ 
+    // Retorna
+    return cpf;
+    
+} 
+/*
+ Valida CPF
+ 
+ @param  string cpf O CPF com ou sem pontos e traço
+ @return bool True para CPF correto - False para CPF incorreto
+*/
+function mvalida_cpf ( valor ) {
+ 
+    // Garante que o valor é uma string
+    valor = valor.toString();
+    
+    // Remove caracteres inválidos do valor
+    valor = valor.replace(/[^0-9]/g, '');
+ 
+ 
+    // Captura os 9 primeiros dígitos do CPF
+    // Ex.: 02546288423 = 025462884
+    var digitos = valor.substr(0, 9);
+ 
+    // Faz o cálculo dos 9 primeiros dígitos do CPF para obter o primeiro dígito
+    var novo_cpf = calc_digitos_posicoes( digitos, 10, 0 );
+ 
+    // Faz o cálculo dos 10 dígitos do CPF para obter o último dígito
+    var novo_cpf = calc_digitos_posicoes( novo_cpf, 11, 0 );
+ 
+    // Verifica se o novo CPF gerado é idêntico ao CPF enviado
+    if ( novo_cpf === valor ) {
+        // CPF válido
+        return true;
+    } else {
+        // CPF inválido
+        return false;
+    }
+    
 }
 
 /**
@@ -648,7 +649,121 @@ function valida_nome () {
 
 }
 
+function formata_telefone () {
+	var telefone;
 
+	telefone = $("#user_phone").val();
+
+	telefone = telefone.replace(/[\(\)-]/g, "");
+	console.log("telefone: "+telefone);
+
+	if ( telefone.length == 0 ) {
+		$("#user_phone").val("(");
+		return;		
+	}
+
+	if( telefone.length == 2 ) {
+		$("#user_phone").val( $("#user_phone").val() + ")");
+		return;		
+	}
+
+	if( telefone.length == 7 ) {
+		$("#user_phone").val( $("#user_phone").val() + "-");
+		return;		
+	}
+
+	if( telefone.length == 9 ) {
+		$("#user_phone").val( $("#user_phone").val() + "-");
+		return;		
+	}
+}
+
+function valida_telefone () {
+	var telefone, patt;
+
+	telefone = $("#user_phone").val();
+
+	telefone = telefone.replace(/[\(\)-]/g, "");
+	console.log("telefone: "+telefone);
+
+	patt = /[^0-9]/g;
+	if ( patt.test(telefone) ) {
+		myInfo("#infotelefone", "Telefone inválido. Digite apenas dígitos.");
+		return;
+	}
+
+	if ( telefone.length !== 11 ) {
+		myInfo("#infotelefone", "Telefone inválido. O telefone deve conter 11 dígitos.");
+		return;	
+	}
+
+	myInfoAccepted("#infotelefone", "ok");
+}
+
+function valida_msg () {
+	var msg;
+
+	msg = $("#messageFromUser").val().trim();
+	console.log("msg : "+msg);
+
+
+	if ( msg == "" ) {
+		myInfo("#infomsg", "A mensagem deve ter conteúdo.");
+	}
+
+	// msg = msg.replace(/(\s|\t)+/g, " ");
+}
+
+function valida_como_conheceu () {
+	var atLeastOneIsChecked;
+
+	atLeastOneIsChecked = $("#como :checkbox:checked").length > 0;
+	if ( !atLeastOneIsChecked ) {
+		myInfo("#infocomonosconheceu", "Selecione pelo menos uma das opções acima.");
+		return;
+	}
+	myInfoAccepted("#infocomonosconheceu", "ok");
+}
+
+function valida_data_entrada () {
+	var entrada, atual, vdataentrada, dataentrada, intervalo;
+
+	entrada = $("#tfdataentrada").val();
+
+	console.log("tfdataentrada.val() = "+entrada);
+	// Data de Nascimento:
+	if ( entrada == "" ){
+		myInfo("#infotfdataentrada", "Data inválida.");
+	} else {
+		// var date = new Date('2011','01','02');
+		// alert('the original date is '+date);
+		// var newdate = new Date(date);
+
+		// newdate.setDate(newdate.getDate() - 7); // minus the date
+
+		// var nd = new Date(newdate);
+		// alert('the new date is '+nd);​
+
+		vdataentrada = entrada.split("-");
+
+		dataentrada = new Date(vdataentrada[1]+" "+vdataentrada[2]+", "+vdataentrada[0]); // "M D, YYYY"
+		atual = new Date();				// get current date
+		intervalo = new Date(dataentrada - atual);
+		console.log("Year: "+dataentrada.getFullYear());
+		console.log("Month: "+dataentrada.getMonth());
+		console.log("Day: "+dataentrada.getDate());
+
+
+		console.log("-- INtervalo :" + (new Date(intervalo)).getUTCDate() );		
+		console.log("Year: "+intervalo.getFullYear());
+		console.log("Month: "+intervalo.getMonth());
+		console.log("Day: "+intervalo.getDate());
+
+
+		// base = new Date("1 1, 1990");	// "M D, YYYY"
+	}
+
+}
 
 $(document).ready(function () {
 	console.log("Validation.js loaded successfully.");
@@ -723,7 +838,7 @@ $(document).ready(function () {
 		verifica_senha();
 	});
 
-	$("#cadastrarbtn").click( function (){
+	$("#cadastrarbtn").click( function() {
 		valida_nome_completo();
 		valida_email();
 		valida_cpf();
@@ -740,7 +855,7 @@ $(document).ready(function () {
 		verifica_senha();
 	});
 
-	$("#cancelarbtn").click( function (){
+	$("#cancelarbtn").click( function () {
 		// Apaga todos os infos
 		myInfoAccepted("#infonome", "");
 		myInfoAccepted("#infoemail", "");
@@ -762,15 +877,36 @@ $(document).ready(function () {
 	 */
 
 	// Validacao do campo nome
-	$("#tfnome").keyup( function(){
+	$("#tfnome").keyup( function() {
 		valida_nome();
 	});
-	$("#tfnome").blur( function(){
+	$("#tfnome").blur( function() {
 		valida_nome();
 	});
 
 	// Validacao do campo telefone
-	// $("#user_phone").keyup( )
+	$("#user_phone").focus( function() {
+		formata_telefone();
+	});
+	$("#user_phone").keyup( function() {
+		formata_telefone();
+		valida_telefone();
+	});
 
 
+	$("#enviarbtn").click( function() {
+		valida_nome();
+		valida_email();
+		valida_como_conheceu();
+		valida_msg();
+	});
+
+	/************************************************
+	 * Pagina: booking.html 
+	 */
+
+	 
+	 $("#tfdataentrada").keyup( function() {
+	 	valida_data_entrada();
+	 });
 });

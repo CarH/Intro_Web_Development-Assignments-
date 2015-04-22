@@ -31,6 +31,17 @@ $(document).ready(function  () {
 	ul.append(contato);
 	ul.append(reservas);
 	menu_container.append(ul);
+
+
+	/* Criando o footer padrão:  */
+	var body = $("body");
+	var footer = $("<footer></footer>");
+	var footer_content = $("<div class=\"copy_right\"> Copyright &copy; 2015 Singapore Hotel. All rights reserved. </div>");
+	
+	footer.append(footer_content);
+	body.append(footer);
+	
 	/***********************************************/
+
 
 });
