@@ -14,6 +14,7 @@ function User()
 	var zipCode = "";
 	var email = "";
 	var password = "";
+	var validUser = true;
 }
 
 /*object-oriented programming: setters and getters to each property*/
@@ -117,6 +118,12 @@ User.prototype.setPassword = function(newPassword)
 	this.password = newPassword;
 }
 
+/*NOTE: validUser shall not be set from outside of the class*/
+User.prototype.isValidUser = function()
+{
+	return this.validUser;
+}
+
 /*
  * saveData: saves all the user info.
  * 
@@ -131,6 +138,7 @@ User.prototype.setPassword = function(newPassword)
 User.prototype.saveData = function()
 {
 	if (typeof(Storage) != "undefined") {
+		localStorage.clear();
 		/* 			   	    			 
    		*  the pair (email, password) forms an primary key, 
 		*  wich identifies an unique user in localStorage
@@ -152,8 +160,10 @@ User.prototype.saveData = function()
 		localStorage.setItem(primary_key + "zipCode", this.getZipCode());
 		localStorage.setItem(primary_key + "email", this.getEmail());
 		localStorage.setItem(primary_key + "password", this.getPassword());
+		this.validUser = true;
+		return;
 	} else {
-		this = null;
+		this.validUser = false;
 	}
 }
 
@@ -171,13 +181,12 @@ User.prototype.saveData = function()
  */
 User.prototype.retrieveData = function()
 {
-	var flag_error = "";
 	if (this.getEmail() == null || this.getPassword() == null) {
-		this = null;
+		this.validUser = false;
 	}
 	
 	if (typeof(Storage) == undefined) {
-		this = null;
+		this.validUser = false;
 	}
 
 	var primary_key = this.getEmail() + this.getPassword();
@@ -191,8 +200,8 @@ User.prototype.retrieveData = function()
 	this.setZipCode(localStorage.getItem(primary_key + "zipCode"));
 	this.setEmail(localStorage.getItem(primary_key + "email"));
 	this.setPassword(localStorage.getItem(primary_key + "password"));
+	this.validUser = true;
 }
-
 
 /*
  * validateUser: checks whether a user exists
@@ -208,12 +217,17 @@ User.prototype.retrieveData = function()
 User.prototype.validateUser = function()
 {
 	if (typeof(Storage) == undefined) {
-		this = null;
+		this.validUser = false;
+		return;
 	}
 
 	var primary_key = this.getEmail() + this.getPassword();
 	var CPF = localStorage.getItem(primary_key + "cpf");
 	if (CPF == null || CPF == undefined) {
-		this = null;	
+		this.validUser = false;	
+		return;
+	} else {
+		this.validUser = true;
+		return;
 	}
 }
