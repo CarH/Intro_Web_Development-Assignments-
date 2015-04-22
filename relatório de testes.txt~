@@ -1,0 +1,38 @@
+Lista de Testes: 
+
+(Tour Intelectual) - VALIDAÇÃO
+
+-> tela de Login;
+	não houve ocorrência de bugs nos testes realizados.
+	i. insere email mas nao insere senha
+	ii. insere senha mais nao insere email
+	iii. nao permite login quando um dos campos é salvo e válido, mas o outro esta em branco
+
+-> tela de Cadastro;
+	i. CPF: exemplo de entrada: 999.999.999-99 (CPF FICTICIO). ok. BUG.
+	ii. Data de nascimento: exemplo de entrada - 29/031994. ok. BUG.
+				exemplo de entrada - 01/01/<NADA>. ok. BUG.
+				exemplo de entrada - 01/01/1899. ok. BUG.
+	iii. CEP: exemplo de entrada: estado: SP, CEP: 11111-111. ok. (BUG?)
+	iv. senha: frederico2903. força da senha: cinza (?)
+	v. senha: permite ser copiada e colada. (? - nao sei qual caractere é copiado ao certo.)
+
+
+-> tela de Reservas
+	i. data de saída e data de entrada: permite inserção de data de entrada no futuro e saída no passado.
+					    permite entrada no passado e saída no futuro.
+					    permite entrada e saída no mesmo dia.
+					    permite reserva com menos de dois dias em relação a data atual.
+					    permite a insercao de valores inválidos para data.
+
+	ii. campos podem estar vazios e validação não informa nada
+
+
+-> tela de Contatos
+	i. nome: permite a inserção de nome com uma única palavra;
+	ii. telefone. só ppermite a inserção de celulares. porém acredito estar ok.
+	iii. problema de execução. jquery de validação e de controller são executados concomitantemente. (AMBOS DEVEM TRATAR O ERRO)
+	iv. testar obrigatoriedade do campo. não pode ser obrigatório, segundo enunciado.
+
+(Tour FedEx) - PERSISTÊNCIA DE DADOS
+
