@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$("#enviarbtn").click(function() {
+	$("#contactform").on('submit_contact', function() {
 		var new_contact = new Contact();
 		new_contact.setUserName($("#tfnome").val());
 		new_contact.setUserMail($("#tfemail").val());
