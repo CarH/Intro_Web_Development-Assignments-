@@ -38,17 +38,21 @@ Lista de Testes:
 
 -> tela de login
 	-> login de usuário existente. ok.
-	->login de usuário inexistente. ok.
+	-> login de usuário inexistente. ok.
 	-> login de múltiplos usuários existentes.  ok.
 	-> login de múltilplos usuários inexistentes. ok.
 	-> login de múltiplos usuários: existentes e inexistentes. ok.
 
 -> tela de cadastro
 	-> redirecionar para home.html
-	
-	
+	-> demais testes de persistência estão correlacionados ao fato de os fields á estarem validados.	
+
 
 ->tela de reservas
+	-> TypeError: $(...).val(...) is undefined validation.js:627:8
+	-> Não consegui testar novamente, depois de relatado este erro. :(
+
+
 
 -> tela de contatos
 

@@ -45,10 +45,13 @@ Lista de Testes:
 
 -> tela de cadastro
 	-> redirecionar para home.html
-	-> demais testes de persistência estão correlacionados 
-	
+	-> demais testes de persistência estão correlacionados ao fato de os fields á estarem validados.	
+
 
 ->tela de reservas
+	-> TypeError: $(...).val(...) is undefined validation.js:627:8
+	-> Não consegui testar novamente, depois de relatado este erro. :(
 
 -> tela de contatos
+	-> redirecionar para tela principal.
 
