@@ -14,6 +14,7 @@ function import_font_style() {
 
 $(document).ready(function  () {
 
+	/* Import da fonte provida pelo Google fonts */
 	import_font_style();
 
 	/* Criando o Menu padrão:  */

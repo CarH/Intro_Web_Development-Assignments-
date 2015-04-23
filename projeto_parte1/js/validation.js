@@ -49,7 +49,7 @@ function valida_nome_completo () {
 
 	if ( partes == "" ) {
 		myInfo("#infonome", "O campo nome é de preenchimento obrigatório.");
-		return;
+		return false;
 	}
 
 	partes = partes.split(" ");
@@ -66,7 +66,7 @@ function valida_nome_completo () {
 			}
 			k++; 
 		}
-		console.log("k = "+k+"    |   partes.length = "+partes.length);
+		// console.log("k = "+k+"    |   partes.length = "+partes.length);
 		if ( k != partes.length ) {
 			myInfo("#infonome", "Todas as palavras devem ter, no mínimo, 3 caracteres");
 		} else { // Temos pelo menos 2 palavras, todas com >= 3 caracteres
@@ -83,14 +83,17 @@ function valida_nome_completo () {
 				success = true;
 			}
 
-			/// Debuging:
+			/// Debuging purpose:
 			for (var i = 0; i < partes.length; i++) {
 				console.log("partes["+i+"]: "+partes[i]);
 			}
+			///
 
 			if ( success ) {
 				myInfoAccepted("#infonome", "ok!");
+				return true;
 			}
+			return false;
 		}
 
 	}
@@ -108,7 +111,7 @@ function valida_email () {
 	if ( email == "" ) {
 		myInfo("#infoemail", "O campo email é de preenchimento obrigatório.");
 		// $("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 1: primeiro caracter deve ser uma letra
@@ -116,7 +119,7 @@ function valida_email () {
 	if ( patt.test(email) ) {
 		myInfo("#infoemail", "A primeira letra do email deve ser uma letra do alfabeto.");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 2: ausência de caracteres maiúsculos
@@ -125,7 +128,7 @@ function valida_email () {
 		// console.log("Email deve conter apenas caracteres minúsculos.");
 		myInfo("#infoemail", "Email não pode conter caracteres maiúsculos.");
 		$("#tfemail").focus();
-		return;
+		return false;
 	} 
 
 	/// Checagem 3: deve haver apenas um caracter @
@@ -137,7 +140,7 @@ function valida_email () {
 	if ( counter !== 1 ) {
 		myInfo("#infoemail", "Email deve conter um, e apenas um, caractere \"@\".");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 4: deve haver no mínimo um caracter "."
@@ -149,7 +152,7 @@ function valida_email () {
 	if ( counter < 1 ) {
 		myInfo("#infoemail", "Email deve conter, no mínimo, um caractere \".\" após o \"@\"");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 6: ".@" ou "@." não são permitidos
@@ -157,7 +160,7 @@ function valida_email () {
 	if ( patt.test(email) ) {
 		myInfo("#infoemail", "Email pode não pode conter caractere \".\" adjacente ao caractere \"@\".");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 5: checa se tem "." após o caracter @
@@ -165,7 +168,7 @@ function valida_email () {
 	if ( !patt.test(email) ) {
 		myInfo("#infoemail", "Email deve conter pelo menos um caractere \".\" após o \"@\".");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 7: Email não pode ser finalizado com "." ou "@"
@@ -173,7 +176,7 @@ function valida_email () {
 	if ( patt.test(email[email.length-1]) ) {
 		myInfo("#infoemail", "Email não pode ser finalizado com \""+email[email.length-1]+"\"");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 
 	/// Checagem 8: Email não pode conter espaços e afins
@@ -181,9 +184,10 @@ function valida_email () {
 	if ( patt.test(email) ) {
 		myInfo("#infoemail", "Email não pode conter espaços.");
 		$("#tfemail").focus();
-		return;
+		return false;
 	}
 	myInfoAccepted("#infoemail", "ok!");
+	return true;
 }
 
 
@@ -635,7 +639,7 @@ function valida_nome () {
 	nome = $("#tfnome").val().trim();
 	if ( nome == "" ) {
 		myInfo("#infonome", "O campo nome é de preenchimento obrigatório.");
-		return;
+		return false;
 	}
 
 	console.log("nome(antes) = "+nome);
@@ -646,16 +650,17 @@ function valida_nome () {
 	patt = /^[^a-zA-Z]/g;
 	if ( patt.test(nome) ) {
 		myInfo("#infonome", "O nome deve iniciar com uma letra do alfabeto.");
-		return;
+		return false;
 	}
 
 	/// Checagem 2: pelo menos 3 caracteres
 	patt = /.{3,}/g;
 	if ( !patt.test(nome) ) {
 		myInfo("#infonome", "O nome deve conter ao menos três caracteres.");
-		return;
+		return false;
 	}
 	myInfoAccepted("#infonome", "ok!");
+	return true;
 
 }
 
@@ -719,8 +724,9 @@ function valida_msg () {
 
 	if ( msg == "" ) {
 		myInfo("#infomsg", "A mensagem deve ter conteúdo.");
+		return false;
 	}
-
+	return true;
 	// msg = msg.replace(/(\s|\t)+/g, " ");
 }
 
@@ -730,9 +736,10 @@ function valida_como_conheceu () {
 	atLeastOneIsChecked = $("#como :checkbox:checked").length > 0;
 	if ( !atLeastOneIsChecked ) {
 		myInfo("#infocomonosconheceu", "Selecione pelo menos uma das opções acima.");
-		return;
+		return false;
 	}
 	myInfoAccepted("#infocomonosconheceu", "ok!");
+	return true;
 }
 
 /**
@@ -916,8 +923,24 @@ $(document).ready(function () {
 		verifica_senha();
 	});
 
-	// TODO : Mudar para onsubmit
-	$("#cadastrarbtn").click( function() {
+	// TODO : Mudar para submit
+	// $("#cadastrarbtn").click( function() {
+	// 	valida_nome_completo();
+	// 	valida_email();
+	// 	valida_cpf();
+	// 	valida_data_nasc();
+	// 	valida_sexo();
+	// 	valida_estado_civil();
+
+	// 	valida_cidade();
+	// 	valida_estado();
+	// 	valida_cep();
+
+	// 	valida_email();
+	// 	valida_senha();
+	// 	verifica_senha();
+	// });
+	$("#registerform").submit( function() {
 		valida_nome_completo();
 		valida_email();
 		valida_cpf();
@@ -933,6 +956,7 @@ $(document).ready(function () {
 		valida_senha();
 		verifica_senha();
 	});
+	
 
 	$("#cancelarbtn").click( function () {
 		// Apaga todos os infos
@@ -972,12 +996,23 @@ $(document).ready(function () {
 		valida_telefone();
 	});
 
+	///SUBMISSION:
+	// $("#enviarbtn").click( function() {
+	// 	valida_nome();
+	// 	valida_email();
+	// 	valida_como_conheceu();
+	// 	valida_msg();
+	// });
 
-	$("#enviarbtn").click( function() {
-		valida_nome();
-		valida_email();
-		valida_como_conheceu();
-		valida_msg();
+	$("#contactform").submit( function(event) {
+		console.log("preventDefault!");
+		if ( valida_nome() && valida_email() &&
+		 	 valida_como_conheceu() && valida_msg() ) {
+			// OK!
+			$("#contactform").triggerHandler("submit_contact");
+		} else { 
+			event.preventDefault(); // Cancela a submissão
+		}
 	});
 
 	/************************************************
