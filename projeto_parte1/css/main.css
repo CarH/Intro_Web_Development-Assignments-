@@ -74,30 +74,37 @@ textarea {
 
 .btnpattern {
 	width: inherit;
+	border: transparent;
+	border-color: white;
 	color: white;
 	max-width: 240px;
 	float: left;
 	background-color: rgba(1, 1, 1, 0.5);
 	margin-top: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 7px;
+	padding-bottom: 7px;
 	padding-left: 30px;
 	padding-right: 30px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+	margin-right: 12px;
 }
 
 .btnpattern:hover {
 	background-color: white;
-	color: black;
+	color: rgba(1, 1, 1, 0.95);
+	border-color: rgba(1, 1, 1, 0.5);
+	-webkit-transition: all 0.6s ease;
+	-moz-transition: all 0.6s ease;
+	-o-transition: all 0.6s ease;
+	transition: all 0.6s ease;
+	box-shadow: 0 12px 14px rgba(9,9,9,0.12), 0 12px 16px rgba(9,9,9,0.24);
 }
 
 .tfpattern {
 	/*width: 20%;*/
 	height: 25px;
-	-webkit-border-radius: 5%;
-	-moz-border-radius: 5%;
 }
 
 .tfpattern:hover {
@@ -110,6 +117,7 @@ textarea {
 	padding: 20px;
 	width: 100%;
 	float: left;
+	box-shadow: 5px 5px 5px 5px rgba(1,1,1,0.3);
 }
 
 .menu {	
@@ -141,22 +149,22 @@ textarea {
 
 .nav_container>ul>li>a:hover {	
 	color: white;
-	text-shadow: 2px 1px 1px rgb(178, 178, 178);
-	-webkit-border-top-left-radius: 2px;
-	-moz-border-top-left-radius: 2px;
-	-webkit-border-bottom-right-radius: 2px;
-	-moz-border-bottom-right-radius: 2px;
+	-webkit-transition: all 0.6s ease;
+	-moz-transition: all 0.6s ease;
+	-o-transition: all 0.6s ease;
+	transition: all 0.6s ease;
+	text-shadow: 0 0 5px #fff, 0 0 20px #5292B2, 0 0 200px #CCFFFF,0 0 200px #CCFFFF,0 0 200px #CCFFFF,0 0 200px #CCFFFF;
 }
 
 .error_msg {
-	color: rgb(255, 0, 0);
+	color: rgb(255, 51, 0);
 	height: 15px;
 	font-size: 14px;
-	font-weight: bolder;
+	/*font-weight: bolder;*/
 }
 
 .error_msg.blueText {
-	color: rgb(0, 0, 255);
+	color: rgb(153, 204, 0);
 }
 
 #banner>img {
@@ -170,12 +178,13 @@ textarea {
 .leftaside { 
 	float: left;
 	width: 20%;
-	height: 800px;
+	height: 100%;
 }
 
 .formclass {
 	float: left;
-	margin: 10px;
+	margin-top: 40px;
+	margin-bottom: 40px;
 	margin-left: 25%;/* placeholder! */
 	margin-right: 25%;/*placeholder! */
 	min-width: 379px;
@@ -186,16 +195,19 @@ textarea {
 	background-color: rgba(0, 0, 0, 0.75); 
 	box-shadow: 5px 5px 5px rgba(1,1,1,0.3);
 }
+
 .formclass input {
 	width: 60%; /* largura do tf*/
 	padding: 3px;
 	display: block;
+	border-radius: 12px;
 }
 
 .formclass select {
 	width: 100px;
 	padding: 3px;
 	display: block;
+	border-radius: 12px;
 }
 
 /************ REGISTRATION PAGE ************/

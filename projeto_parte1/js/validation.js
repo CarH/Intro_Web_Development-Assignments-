@@ -17,7 +17,7 @@ function myInfo (element, text) {
 
 	$(element).text(text);
 	x = $(element).css("color");
-	if ( x === "rgb(0, 0, 255)" ){
+	if ( x === "rgb(153, 204, 0)" ){
 		$(element).toggleClass("blueText");
 	}
 }
@@ -27,7 +27,7 @@ function myInfoAccepted (element, text) {
 
 	$(element).text(text);
 	x = $(element).css("color");
-	if ( x === "rgb(255, 0, 0)" ){
+	if ( x === "rgb(255, 51, 0)" ){
 		$(element).toggleClass("blueText");
 	}
 }
@@ -147,7 +147,7 @@ function valida_email () {
 		counter++;	
 	}
 	if ( counter < 1 ) {
-		myInfo("#infoemail", "Email deve conter, no mínimo, um caractere \".\"");
+		myInfo("#infoemail", "Email deve conter, no mínimo, um caractere \".\" após o \"@\"");
 		$("#tfemail").focus();
 		return;
 	}
@@ -172,6 +172,14 @@ function valida_email () {
 	patt = new RegExp("[\.@]");
 	if ( patt.test(email[email.length-1]) ) {
 		myInfo("#infoemail", "Email não pode ser finalizado com \""+email[email.length-1]+"\"");
+		$("#tfemail").focus();
+		return;
+	}
+
+	/// Checagem 8: Email não pode conter espaços e afins
+	patt = new RegExp("\\s");
+	if ( patt.test(email) ) {
+		myInfo("#infoemail", "Email não pode conter espaços.");
 		$("#tfemail").focus();
 		return;
 	}
@@ -360,7 +368,7 @@ function valida_data_nasc () {
 			if ( dataNasc.getTime() > limit.getTime() ){ // > current date
 				myInfo("#infodatanasc", "Data inválida. A data máxima aceita é "+limit.getUTCDate()+"/"+(limit.getUTCMonth()+1)+"/"+limit.getFullYear());
 			} else {
-				myInfoAccepted("#infodatanasc", "ok");	
+				myInfoAccepted("#infodatanasc", "ok!");	
 			}
 		}
 	}
@@ -375,7 +383,7 @@ function valida_sexo () {
 	if ( !$("#masculino").is(':checked') && !$("#feminino").is(':checked') ) {
 		myInfo("#infosexo", "Selecione o sexo.");
 	} else {
-		myInfoAccepted("#infosexo", "ok.");
+		myInfoAccepted("#infosexo", "ok!");
 	}
 }
 
@@ -387,7 +395,7 @@ function valida_estado_civil () {
 	if ( $("#marital_status").val() == "unknown" ) {
 		myInfo("#infoestadocivil", "Selecione o estado civil.");
 	} else {
-		myInfoAccepted("#infoestadocivil", "ok");
+		myInfoAccepted("#infoestadocivil", "ok!");
 	}
 }
 
@@ -399,7 +407,7 @@ function valida_estado () {
 	if ( $("#user_state").val() == "unknown" ) {
 		myInfo("#infoestado", "Selecione o estado.");
 	} else {
-		myInfoAccepted("#infoestado", "ok");
+		myInfoAccepted("#infoestado", "ok!");
 	}
 }
 
@@ -413,7 +421,7 @@ function valida_cidade () {
 	if ( cidade.length == 0 ) {
 		myInfo("#infocidade", "Digite o nome da cidade onde você reside.");
 	} else {
-		myInfoAccepted("#infocidade", "ok");
+		myInfoAccepted("#infocidade", "ok!");
 	}
 }
 
@@ -479,7 +487,7 @@ function valida_cep () {
 	console.log("mHash[estado].length = "+mHash[estado.val()].length );
 	for(var i = 0; i < mHash[estado.val()].length; i++) {
 		if ( cep[0] == mHash[estado.val()][i]) {
-			myInfoAccepted("#infocep", "ok");
+			myInfoAccepted("#infocep", "ok!");
 			return;
 		}
 	}
@@ -647,7 +655,7 @@ function valida_nome () {
 		myInfo("#infonome", "O nome deve conter ao menos três caracteres.");
 		return;
 	}
-	myInfoAccepted("#infonome", "ok");
+	myInfoAccepted("#infonome", "ok!");
 
 }
 
@@ -699,7 +707,7 @@ function valida_telefone () {
 		return;	
 	}
 
-	myInfoAccepted("#infotelefone", "ok");
+	myInfoAccepted("#infotelefone", "ok!");
 }
 
 function valida_msg () {
@@ -724,36 +732,40 @@ function valida_como_conheceu () {
 		myInfo("#infocomonosconheceu", "Selecione pelo menos uma das opções acima.");
 		return;
 	}
-	myInfoAccepted("#infocomonosconheceu", "ok");
+	myInfoAccepted("#infocomonosconheceu", "ok!");
 }
 
+/**
+ * Faz a validação comum a todas as datas
+ * @param element: string contendo o seletor, ex.: "#idelement"
+ * @param infoelement: string contendo o id da div na qual serão exibidas as
+ * mensagens de erro.
+ */
 function valida_data_geral (element, infoelement) {
-	var entrada, patt, aux;
+	var data, patt;
 
-	entrada = $(element).val().trim();
-
-	console.log("data = "+entrada);
-
-	aux = entrada.replace(/(\/|\-)/g, "");
-	// alert(aux);
+	data = $(element).val().trim();
+	data = data.replace(/(\/|\-)/g, "");
+	
 	/// Checagem 1: vazio
-	if ( aux == "" ){
-		myInfo(infoelement, "Data de entrada é de preenchimento obrigatório."); // TODO: ver data de entrada a
+	if ( data == "" ){
+		myInfo(infoelement, "Este campo é de preenchimento obrigatório."); // TODO: ver data de entrada a
 		return false;
-	} 
+	}
 
 	/// Checagem 2: caracter inválido
-	patt = /[^0-9\-]/g; // TODO
-	if ( patt.test(aux) ){
-		myInfo(infoelement, "O campo data contém caracteres inválidos.");
+	patt = /[^0-9]/g; // TODO
+	if ( patt.test(data) ){
+		myInfo(infoelement, "A data informada contém caracteres inválidos.");
 		return false;
 	}
 
 	/// Checagem 3: TAMANHO	
-	if ( aux.length  > 8 ){
-		myInfo(infoelement, "Data inválida.");
+	if ( data.length  !== 8 ){
+		myInfo(infoelement, "A data deve estar no formato DD/MM/AAAA.");
 		return false;
 	}
+	/// Nesse caso, a data contém 8 caracteres.
 	myInfo(infoelement, "");
 	return true;
 }
@@ -780,19 +792,29 @@ function valida_data_entrada () {
 	if ( dataentrada < dataminima ) {
 		myInfo("#infodataentrada", "Data de entrada deve possuir, no mínimo dois dias a mais do que a data atual.");
 	} else {
-		myInfoAccepted("#infodataentrada", "ok");
+		myInfoAccepted("#infodataentrada", "ok!");
 	}
 	
 }
 
 function valida_data_saida () {
-	var entrada, saida, vdataentrada, vdatasaida, dataentrada, datasaida, dataminima;
+	var entrada, saida, vdataentrada, vdatasaida, dataentrada, datasaida, dataminima, aux;
 
 	entrada = $("#tfdataentrada").val().trim();
 	saida = $("#tfdatasaida").val().trim();
 
 	console.log("data entrada = "+entrada);
 	console.log("data saida = "+saida);
+
+
+	aux = entrada.replace(/(\/|\-)/g, "");
+	// alert(aux);
+	/// Checagem 1: vazio
+	if ( aux == "" ){
+		myInfo(infoelement, "Data de entrada é de preenchimento obrigatório."); // TODO: ver data de entrada a
+		return false;
+	} 
+
 
 	vdataentrada = entrada.split("-");
 	vdatasaida = saida.split("-");
@@ -816,7 +838,7 @@ function valida_data_saida () {
 	if ( datasaida < dataminima ) {
 		myInfo("#infodatasaida", "Data de saída deve possuir, no mínimo, dois dias a mais do que a data de entrada.");
 	} else {
-		myInfoAccepted("#infodatasaida", "ok");
+		myInfoAccepted("#infodatasaida", "ok!");
 	}
 }
 
@@ -963,7 +985,7 @@ $(document).ready(function () {
 	 */
 
 
-	$("#tfdataentrada").keyup( function() {
+	$("#tfdataentrada").click( function() {
 		if ( valida_data_geral("#tfdataentrada", "#infodataentrada") ){
 			valida_data_entrada();
 		}
@@ -975,7 +997,7 @@ $(document).ready(function () {
 	});
 
 
-	$("#tfdatasaida").keyup( function() {
+	$("#tfdatasaida").click( function() {
 	 	if ( valida_data_geral("#tfdatasaida", "#infodatasaida") ){
 			valida_data_saida();
 	 	}
