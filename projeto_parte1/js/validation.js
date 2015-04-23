@@ -1061,10 +1061,21 @@ $(document).ready(function () {
 		}
 	});
 
-	/// TODO
 	$("#bookingform").submit( function(event) {
-		// $("#bookingform").triggerHandler("submit_booking");
-
+		if ( valida_data_geral("#tfdataentrada", "#infodataentrada") 
+			 && valida_data_geral("#tfdatasaida", "#infodatasaida") ) {
+			if ( valida_data_entrada() && valida_data_saida() ){
+				// OK
+				console.log("submit_booking");
+				$("#bookingform").triggerHandler("submit_booking");
+			} else {
+				console.log("preventDefault");
+				event.preventDefault();
+			}		
+		} else {
+			console.log("preventDefault");
+			event.preventDefault();
+		}
 	});
 
 });
