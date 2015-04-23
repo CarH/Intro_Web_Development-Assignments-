@@ -298,26 +298,28 @@ function valida_cpf () {
 
 	if ( cpf == "" ) {
 		myInfo("#infocpf", "O campo CPF é de preenchimento obrigatório.");
-		return;
+		return false;
 	}
 
 	patt = /[^0-9\/-]/g;
 	if ( patt.test (cpf) ) {
 		myInfo("#infocpf", "CPF pode conter apenas números ou números e \".\" e/ou \"-\".");
-		return;
+		return false;
 	}
 
 	if ( cpf.length > 11 ) {
 		myInfo("#infocpf", "CPF deve conter apenas 11 dígitos.");
-		return;
+		return false;
 	}
 
 	if ( cpf.length == 11 && mvalida_cpf( cpf ) ) {
 		console.log("CPF válido");
 		myInfoAccepted("#infocpf", "CPF válido.");
+		return true;
 	} else {
 		console.log("CPF inválido");
 		myInfo("#infocpf", "CPF inválido.");
+		return false;
 	}
 }
 
@@ -351,6 +353,7 @@ function valida_data_nasc () {
 	// Data de Nascimento:
 	if ( $("#dataNasc").val() == "" ){
 		myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
+		return false;
 	} else {
 		dataStr = $("#dataNasc").val();
 		dataStr = dataStr.replace(/(\/\.)/g, "-"); // para o firefox
@@ -368,11 +371,14 @@ function valida_data_nasc () {
 		console.log("base.getFullYear() = "+base.getFullYear());
 		if ( dataNasc.getFullYear() < base.getFullYear() ) { // > 1990
 			myInfo("#infodatanasc", "Data inválida. A data mínima aceita é 01/01/1990.");
+			return false;
 		} else {
 			if ( dataNasc.getTime() > limit.getTime() ){ // > current date
 				myInfo("#infodatanasc", "Data inválida. A data máxima aceita é "+limit.getUTCDate()+"/"+(limit.getUTCMonth()+1)+"/"+limit.getFullYear());
+				return false;
 			} else {
 				myInfoAccepted("#infodatanasc", "ok!");	
+				return true;
 			}
 		}
 	}
@@ -386,9 +392,10 @@ function valida_sexo () {
 	console.log(" masculino = "+$("#masculino").is(':checked')+", feminino = "+$("#feminino").is(':checked'));
 	if ( !$("#masculino").is(':checked') && !$("#feminino").is(':checked') ) {
 		myInfo("#infosexo", "Selecione o sexo.");
-	} else {
-		myInfoAccepted("#infosexo", "ok!");
+		return false;
 	}
+	myInfoAccepted("#infosexo", "ok!");
+	return true;
 }
 
 /**
@@ -398,8 +405,10 @@ function valida_estado_civil () {
 	// estado civil
 	if ( $("#marital_status").val() == "unknown" ) {
 		myInfo("#infoestadocivil", "Selecione o estado civil.");
+		return false;
 	} else {
 		myInfoAccepted("#infoestadocivil", "ok!");
+		return true;
 	}
 }
 
@@ -410,8 +419,10 @@ function valida_estado () {
 	// estado
 	if ( $("#user_state").val() == "unknown" ) {
 		myInfo("#infoestado", "Selecione o estado.");
+		return false;
 	} else {
 		myInfoAccepted("#infoestado", "ok!");
+		return true;
 	}
 }
 
@@ -424,8 +435,10 @@ function valida_cidade () {
 	cidade = cidade.replace(/(\s|\t)+/g, "");
 	if ( cidade.length == 0 ) {
 		myInfo("#infocidade", "Digite o nome da cidade onde você reside.");
+		return false;
 	} else {
 		myInfoAccepted("#infocidade", "ok!");
+		return true;
 	}
 }
 
@@ -471,32 +484,36 @@ function valida_cep () {
 	cep = cep.replace(/-/g, "");
 	estado = $("#user_state");
 	console.log("estado: "+estado.val());
+
+	/// Checagem 1: testa se o usuário selecionou o estado
 	if ( estado.val() == "unknown" ) {
 		myInfo("#infocep", "Informe primeiramente o estado.");
 		estado.focus();
-		return;
+		return false;
 	}
 
+	/// Checagem 2: testa se o CEP está vazio	
 	if ( cep == "" ) {
 		myInfo("#infocep", "O campo CEP é de preenchimento obrigatório.");
-		return;
+		return false;
 	}	
 
+	/// Checagem 3: testa se o CEP contém apenas dígitos
 	patt = /[^0-9]/g;
 	if ( patt.test(cep) ) {
 		myInfo("#infocep", "O CEP é composto de números apenas.");
-		return;
+		return false;
 	}
 
 	console.log("mHash[estado].length = "+mHash[estado.val()].length );
 	for(var i = 0; i < mHash[estado.val()].length; i++) {
 		if ( cep[0] == mHash[estado.val()][i]) {
 			myInfoAccepted("#infocep", "ok!");
-			return;
+			return true;
 		}
 	}
 	myInfo("#infocep", "CEP inválido.");
-	
+	return false;
 }
 
 function formata_cep () {
@@ -529,6 +546,9 @@ function formata_cep () {
 	}
 }
 
+/**
+ *	Verifica se a senha informada corresponde a confirmada
+ */
 function verifica_senha () {
 	// TODO : checar se a senha corresponde com a confirmada
 	var senha, conf_senha, info;
@@ -537,15 +557,18 @@ function verifica_senha () {
 	conf_senha = $("#conf_pass");
 	info = $("#infoconfsenha");
 
+	/// Checagem 1: limites de tamanho da senha de confirmação
 	if ( conf_senha.val().length < 6 || conf_senha.val().length > 12) {
 		myInfo("#infoconfsenha", "A senha deve conter de 6 a 12 caracteres!");		
-		return;
+		return false;
 	}
 
 	if ( senha.val() !== conf_senha.val() ) {
 		myInfo("#infoconfsenha", "A senha confirmada não corresponde com a senha informada.");		
+		return false;
 	} else {
 		myInfoAccepted("#infoconfsenha", "Senha confirmada corretamente.");
+		return true;
 	}
 }
 
@@ -566,9 +589,9 @@ function valida_senha () {
 	if ( senha.length < MIN_SIZE_PASS || senha.length > MAX_SIZE_PASS ) {
 		myInfo("#infosenha", "A senha deve conter de 6 a 12 caracteres!");
 		info.text("Força da senha");
+		return false;
 	} else {
-		myInfoAccepted("#infosenha", "");
-
+		myInfoAccepted("#infosenha", ""); // Só apaga o texto
 
 		/// Checagem 1: Presença de caracteres especiais:
 		patt = /[^a-zA-Z0-9]/g; // flag g ativada!
@@ -619,7 +642,7 @@ function valida_senha () {
 			progress_bar.addClass("weak");
 			info.text("Senha fraca");
 		}
-		console.log("senha.length = "+senha.length);	
+		return true;
 	}
 }
 
@@ -936,25 +959,20 @@ $(document).ready(function () {
 	// 	valida_estado();
 	// 	valida_cep();
 
-	// 	valida_email();
 	// 	valida_senha();
 	// 	verifica_senha();
 	// });
-	$("#registerform").submit( function() {
-		valida_nome_completo();
-		valida_email();
-		valida_cpf();
-		valida_data_nasc();
-		valida_sexo();
-		valida_estado_civil();
-
-		valida_cidade();
-		valida_estado();
-		valida_cep();
-
-		valida_email();
-		valida_senha();
-		verifica_senha();
+	$("#registerform").submit( function(event) {
+		if ( valida_nome_completo() && valida_cpf() && valida_data_nasc() 
+			 && valida_sexo() && valida_estado_civil() && valida_cidade() 
+			 && valida_estado() && valida_cep() && valida_email() 
+			 && valida_senha() && verifica_senha() ) {
+			// ok
+			$("#registerform").triggerHandler("submit_register"); 
+		} else {
+			console.log("preventDefault");
+			event.preventDefault();
+		}
 	});
 	
 
@@ -1005,12 +1023,12 @@ $(document).ready(function () {
 	// });
 
 	$("#contactform").submit( function(event) {
-		console.log("preventDefault!");
 		if ( valida_nome() && valida_email() &&
 		 	 valida_como_conheceu() && valida_msg() ) {
 			// OK!
 			$("#contactform").triggerHandler("submit_contact");
 		} else { 
+			console.log("preventDefault");
 			event.preventDefault(); // Cancela a submissão
 		}
 	});
@@ -1041,6 +1059,12 @@ $(document).ready(function () {
 		if ( valida_data_geral("#tfdatasaida", "#infodatasaida") ){
 			valida_data_saida();
 		}
+	});
+
+	/// TODO
+	$("#bookingform").submit( function(event) {
+		// $("#bookingform").triggerHandler("submit_booking");
+
 	});
 
 });
