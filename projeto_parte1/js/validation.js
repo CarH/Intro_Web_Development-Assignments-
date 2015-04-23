@@ -821,8 +821,10 @@ function valida_data_entrada () {
 	
 	if ( dataentrada < dataminima ) {
 		myInfo("#infodataentrada", "Data de entrada deve possuir, no mínimo dois dias a mais do que a data atual.");
+		return false;
 	} else {
 		myInfoAccepted("#infodataentrada", "ok!");
+		return true;
 	}
 	
 }
@@ -854,21 +856,23 @@ function valida_data_saida () {
 	// dataminima = new Date();
 	dataminima.setDate( dataminima.getDate() + 2 ); // add 2 dias a data de entrada
 
-	console.log("-- DATA SAIDA : ");	
-	console.log("Year: "+datasaida.getFullYear());
-	console.log("Month: "+datasaida.getMonth());
-	console.log("Day: "+datasaida.getDate());
+	// console.log("-- DATA SAIDA : ");	
+	// console.log("Year: "+datasaida.getFullYear());
+	// console.log("Month: "+datasaida.getMonth());
+	// console.log("Day: "+datasaida.getDate());
 
 
-	console.log("-- DATA Minima : ");		
-	console.log("Year: "+dataminima.getFullYear());
-	console.log("Month: "+dataminima.getMonth());
-	console.log("Day: "+dataminima.getDate());
+	// console.log("-- DATA Minima : ");		
+	// console.log("Year: "+dataminima.getFullYear());
+	// console.log("Month: "+dataminima.getMonth());
+	// console.log("Day: "+dataminima.getDate());
 	
 	if ( datasaida < dataminima ) {
 		myInfo("#infodatasaida", "Data de saída deve possuir, no mínimo, dois dias a mais do que a data de entrada.");
+		return false;
 	} else {
 		myInfoAccepted("#infodatasaida", "ok!");
+		return true;
 	}
 }
 
@@ -946,22 +950,7 @@ $(document).ready(function () {
 		verifica_senha();
 	});
 
-	// TODO : Mudar para submit
-	// $("#cadastrarbtn").click( function() {
-	// 	valida_nome_completo();
-	// 	valida_email();
-	// 	valida_cpf();
-	// 	valida_data_nasc();
-	// 	valida_sexo();
-	// 	valida_estado_civil();
-
-	// 	valida_cidade();
-	// 	valida_estado();
-	// 	valida_cep();
-
-	// 	valida_senha();
-	// 	verifica_senha();
-	// });
+	/// Formulário de 
 	$("#registerform").submit( function(event) {
 		if ( valida_nome_completo() && valida_cpf() && valida_data_nasc() 
 			 && valida_sexo() && valida_estado_civil() && valida_cidade() 
