@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$("#cadastrarbtn").click(function() {
+	$("#registerform").on('submit_register', function() {
 		var new_user = new User();
 		new_user.setName($("#tfnomecompleto").val());
 		new_user.setCPF($("#tfcpf").val());
@@ -17,6 +17,5 @@ $(document).ready(function(){
 		new_user.setPassword($("#user_password").val());
 		new_user.saveData();
 		alert("Seus dados foram salvos com sucesso. Seu login pode ser efetuado normalmente.");
-		location.replace("www.google.com.br");
 	});
 });
