@@ -1,0 +1,43 @@
+/************ LOGIN PAGE ************/
+.login_container {
+	float: right;
+	padding: 0px;
+}
+
+#email {
+	margin-top: 5px;
+	padding-right: 5px;
+	float: left;
+}
+
+#tfemail {
+	width: 200px;
+}
+
+#password {
+	margin-top: 5px;
+	padding-right: 5px;
+	float: left;
+}
+
+#loginbtn {
+	margin-top: 0px;
+	margin-right: 5px;
+	float: left;
+}
+
+#registerbtn {
+	margin-top: 0px;
+	float: left;
+}
+
+#banner {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	float: left;
+}
+
+#loginbtn, #registerbtn {
+	margin-top: 3px;
+}
