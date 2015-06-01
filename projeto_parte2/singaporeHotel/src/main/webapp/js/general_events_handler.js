@@ -3,7 +3,11 @@
 $(document).ready(function  () {
 
 	$("#registerbtn").click(function(){
-		window.location.href = "registration.html";
+		window.location.href = "/singaporeHotel/registration.jsp";
+	});
+	
+	$("#loginbtn").click(function(){
+		window.location.href = "/singaporeHotel/login.jsp";
 	});
 
 });

@@ -8,8 +8,6 @@
 		<script src="/singaporeHotel/js/jquery-2.1.3.js"></script>
 		<script src="/singaporeHotel/js/validation.js"></script> 
 		<script src="/singaporeHotel/js/layout_adjusts.js"></script>	
-
-		<script src="/singaporeHotel/js/general_events_handler.js"></script>
 		<!-- Observacao: para a correta realizacao do cadastro, eh necessario a inclusao dos seguintes sources. -->
 		<script src="/singaporeHotel/js/cadastro_controller.js"></script>
 		<script src="/singaporeHotel/js/user_class.js"></script>
@@ -30,7 +28,7 @@
 		<div class="formclass color_font_pattern">
 			<h3>Cadastro</h3> 
 
-			<form id="registerform" method="GET" action="/singaporeHotel/servlets/ServletHotel">
+			<form id="registerform" method="POST" action="/singaporeHotel/servlets/ServletHotel">
 				<fieldset>
 					<legend>Informações Pessoais </legend>
 					<div id="nome">

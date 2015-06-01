@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import util.Contract;
+
 /**
  * Servlet implementation class ServletHotel
  */
@@ -18,8 +20,9 @@ public class ServletHotel extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG = true;
 	
-	private ServletContext context;
-	private final String USUARIOS_CADASTRADOS = "usuariosCadastrados";
+	
+	/*Contexto da aplicacao*/
+	private ServletContext context;  
 	
 	
     /**
@@ -33,11 +36,11 @@ public class ServletHotel extends HttpServlet {
     public void init() throws ServletException {
        	super.init();
        	this.context = getServletConfig().getServletContext();
-		this.context.setAttribute(this.USUARIOS_CADASTRADOS, new ArrayList<Usuario>());
+		this.context.setAttribute(Contract.USUARIOS_CADASTRADOS, new ArrayList<Usuario>());
     }
     
     
-    /**************************************************************
+    /******************************************************************
      * Metodos relacionados com a lógica de CONTROLE da aplicacao
      * 
      */
@@ -50,7 +53,7 @@ public class ServletHotel extends HttpServlet {
     private boolean cadastrarUsuario(HttpServletRequest request){
 		/* Recuperando o contexto da aplicacao */
 		ServletContext context = getServletConfig().getServletContext();
-		ArrayList<Usuario> uCadastrados = (ArrayList<Usuario>) context.getAttribute(this.USUARIOS_CADASTRADOS);
+		ArrayList<Usuario> uCadastrados = (ArrayList<Usuario>) context.getAttribute(Contract.USUARIOS_CADASTRADOS);
 		
 		Usuario usuario = new Usuario();
 		usuario.setNome(request.getParameter("nome"));
@@ -67,7 +70,7 @@ public class ServletHotel extends HttpServlet {
 		uCadastrados.add(usuario);
 		
 		/* Atualiza no contexto da aplicacao */
-		context.setAttribute(this.USUARIOS_CADASTRADOS, uCadastrados);
+		context.setAttribute(Contract.USUARIOS_CADASTRADOS, uCadastrados);
 		
 		if (ServletHotel.DEBUG) { 
 			for (Usuario u : uCadastrados) {
@@ -79,8 +82,28 @@ public class ServletHotel extends HttpServlet {
 		return true;
     }
     
+    private Usuario isCadastrado(String email) {
+    	ArrayList<Usuario> lista = (ArrayList<Usuario>)this.context.getAttribute(Contract.USUARIOS_CADASTRADOS);
+    	for (Usuario usuario : lista) {
+			if ( usuario.getEmail().equals(email) ) return usuario;
+		}
+    	return null;
+    }
+    
     private boolean autenticar(HttpServletRequest request) {
-    	// TODO Auto-generated method stub
+    	String email = request.getParameter("email");
+    	String senha = request.getParameter("password");
+    	
+    	// Verificar se o email do usuario esta cadastrado
+    	Usuario usuario = this.isCadastrado(email);
+    	if (usuario != null) {
+    		// Se sim, testa a senha
+    		if (senha.equals(usuario.getSenha())){
+    			// Insere usuario em session p/ ser acessado na .jsp correspondente
+    			request.setAttribute(Contract.USUARIO, usuario);
+    			return true;
+    		}
+    	}
     	return false;
     }
     
@@ -110,13 +133,10 @@ public class ServletHotel extends HttpServlet {
 				
 			} else if (acao.equals("login")){
 				if (ServletHotel.DEBUG){ System.out.println("acao = login"); } 
-				if (this.autenticar(request)){
-					url = "home.jsp";					
-				}
+				 url = (this.autenticar(request)) ? "home.jsp" : "erro_login.jsp";					
 				
 			} else {
-				/* nenhuma acao foi definida */				
-				/* selecionando pagina para o dispatcher */				
+				/* nenhuma acao foi definida */			
 				url="erro.jsp";
 			}
 

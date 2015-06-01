@@ -6,7 +6,6 @@
 		<title>.: Reserva</title>
 		<link rel="stylesheet" type="text/css" href="/singaporeHotel/css/main.css">
 		<script src="/singaporeHotel/js/jquery-2.1.3.js"></script>
-		<script src="/singaporeHotel/js/general_events_handler.js"></script>	
 		<script src="/singaporeHotel/js/validation.js"></script>
 		<script src="/singaporeHotel/js/layout_adjusts.js"></script>
 		<script src="/singaporeHotel/js/booking_class.js"></script>
